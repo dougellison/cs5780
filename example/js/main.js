@@ -8,6 +8,15 @@ var materials = [];
 init();
 animate();
 
+document.getElementById('button').addEventListener('click', function () {
+    if (screenfull.enabled) {
+        screenfull.request();
+		$('#button').hide();
+    } else {
+        // Ignore or do something else
+    }
+});
+
 function init() {
 
 	container = document.createElement( 'div' );
