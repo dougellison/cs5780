@@ -4,6 +4,9 @@ var camera, scene, renderer, objects;
 var particleLight, pointLight;
 
 var materials = [];
+var defaultRotateSize = 0.01;
+var rotateSize = defaultRotateSize;
+var alpha, beeta, gamma;
 
 init();
 animate();
@@ -15,6 +18,18 @@ document.getElementById('button').addEventListener('click', function () {
     } else {
         // Ignore or do something else
     }
+});
+
+window.addEventListener('deviceorientation', function(event) {
+  //console.log(event.alpha + ' : ' + event.beta + ' : ' + event.gamma);
+  if (alpha != event.alpha || beta != event.beta || gamma != event.gamma)
+	rotateSize = defaultRotateSize;
+	
+	alpha = event.alpha;
+	beta = event.beta;
+	gamma = event.gamma;
+	
+	
 });
 
 function init() {
@@ -206,21 +221,22 @@ function render() {
 
 		var object = objects[ i ];
 
-		object.rotation.x += 0.01;
-		object.rotation.y += 0.005;
-
+		object.rotation.x += rotateSize;
+//		object.rotation.y += 0.005;
 	}
+	if (rotateSize > 0)
+		rotateSize -= 0.001;
 
-	materials[ materials.length - 3 ].emissive.setHSL( 0.54, 1, 0.35 * ( 0.5 + 0.5 * Math.sin( 35 * timer ) ) );
-	materials[ materials.length - 4 ].emissive.setHSL( 0.04, 1, 0.35 * ( 0.5 + 0.5 * Math.cos( 35 * timer ) ) );
+//	materials[ materials.length - 3 ].emissive.setHSL( 0.54, 1, 0.35 * ( 0.5 + 0.5 * Math.sin( 35 * timer ) ) );
+//	materials[ materials.length - 4 ].emissive.setHSL( 0.04, 1, 0.35 * ( 0.5 + 0.5 * Math.cos( 35 * timer ) ) );
 
-	particleLight.position.x = Math.sin( timer * 7 ) * 300;
-	particleLight.position.y = Math.cos( timer * 5 ) * 400;
-	particleLight.position.z = Math.cos( timer * 3 ) * 300;
+//	particleLight.position.x = Math.sin( timer * 7 ) * 300;
+//	particleLight.position.y = Math.cos( timer * 5 ) * 400;
+//	particleLight.position.z = Math.cos( timer * 3 ) * 300;
 
-	pointLight.position.x = particleLight.position.x;
-	pointLight.position.y = particleLight.position.y;
-	pointLight.position.z = particleLight.position.z;
+//	pointLight.position.x = particleLight.position.x;
+//	pointLight.position.y = particleLight.position.y;
+//	pointLight.position.z = particleLight.position.z;
 
 	renderer.render( scene, camera );
 
