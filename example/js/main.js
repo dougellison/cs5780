@@ -7,6 +7,9 @@ var materials = [];
 var defaultRotateSize = 0.01;
 var rotateSize = defaultRotateSize;
 var alpha, beeta, gamma;
+var alphaText;
+var betaText;
+var gammaText;
 
 init();
 animate();
@@ -20,14 +23,30 @@ document.getElementById('button').addEventListener('click', function () {
     }
 });
 
+
 window.addEventListener('deviceorientation', function(event) {
   //console.log(event.alpha + ' : ' + event.beta + ' : ' + event.gamma);
-  if (alpha != event.alpha || beta != event.beta || gamma != event.gamma)
-	rotateSize = defaultRotateSize;
+  //if (alpha != event.alpha || beta != event.beta || gamma != event.gamma)
+//	rotateSize = defaultRotateSize;
 	
-	alpha = event.alpha;
-	beta = event.beta;
-	gamma = event.gamma;
+	//alpha = event.alpha;
+	//beta = event.beta;
+	//gamma = event.gamma;
+	if (alphaText) {
+		scene.remove(alphaText);
+	}
+	if (betaText) {
+		scene.remove(betaText);
+	}
+	if (gammaText) {
+		scene.remove(gammaText);
+	}
+	
+	alphaText = createText(event.alpha, 100);
+	betaText = createText(event.beta, 200);
+	gammaText = createText(event.gamma, 300);
+	
+
 	
 	
 });
@@ -63,41 +82,9 @@ function init() {
 
 	
 	var sphere, geometry, material;
-	var text = "three.js",
-	height = 20,
-	size = 70,
-	hover = 30,
-
-	curveSegments = 4,
-
-	bevelThickness = 2,
-	bevelSize = 1.5,
-	bevelSegments = 3,
-	bevelEnabled = true,
-
-	font = "optimer", // helvetiker, optimer, gentilis, droid sans, droid serif
-	weight = "bold", // normal bold
-	style = "normal"; // normal italic
 	
-	
-	var textGeo = new THREE.TextGeometry("HELLO", {
-					size: size,
-					height: height,
-					curveSegments: curveSegments,
-					font: font,
-					weight: weight,
-					style: style,
-					bevelThickness: bevelThickness,
-					bevelSize: bevelSize,
-					bevelEnabled: bevelEnabled
-					});
-					
-	var material = new THREE.MeshFaceMaterial( [ 
-					new THREE.MeshPhongMaterial( { color: 0xffffff, shading: THREE.FlatShading } ), // front
-					new THREE.MeshPhongMaterial( { color: 0xffffff, shading: THREE.SmoothShading } ) // side
-				] );					
-	textMesh1 = new THREE.Mesh( textGeo, material );
-	scene.add(textMesh1);
+	//textMesh = createText()
+	//scene.add(textMesh);
 	var geometry = new THREE.SphereGeometry( 50, 32, 32 );
 	var material = new THREE.MeshBasicMaterial( {color: 0x33ccff, wireframe: true} );
 	var sphere = new THREE.Mesh( geometry, material );
@@ -105,10 +92,10 @@ function init() {
 
 	//particleLight = new THREE.Mesh( new THREE.SphereGeometry( 4, 8, 8 ), new THREE.MeshBasicMaterial( { color: 0xffffff } ) );
 	
-	//var pointLight = new THREE.PointLight( 0xffffff, 1.5 );
-	//pointLight.position.set( 0, 100, 90 );
-	//pointLight.color.setHSL( Math.random(), 1, 0.5 );
-	//scene.add(pointLight);
+	var pointLight = new THREE.PointLight( 0xffffff, 1.5 );
+	pointLight.position.set( 0, 100, 90 );
+	pointLight.color.setHSL( Math.random(), 1, 0.5 );
+	scene.add(pointLight);
 	//scene.add( particleLight );
 
 	// Lights
@@ -175,6 +162,46 @@ function render() {
 	//if (rotateSize > 0)
 	//	rotateSize -= 0.001;
 	renderer.render( scene, camera );
+
+}
+function createText(text, location) {
+
+	height = 20,
+	size = 70,
+	hover = 30,
+
+	curveSegments = 4,
+
+	bevelThickness = 2,
+	bevelSize = 1.5,
+	bevelSegments = 3,
+	bevelEnabled = true,
+
+	font = "optimer", // helvetiker, optimer, gentilis, droid sans, droid serif
+	weight = "bold", // normal bold
+	style = "normal"; // normal italic
+
+	
+	var textGeo = new THREE.TextGeometry(text, {
+					size: size,
+					height: height,
+					curveSegments: curveSegments,
+					font: font,
+					weight: weight,
+					style: style,
+					bevelThickness: bevelThickness,
+					bevelSize: bevelSize,
+					bevelEnabled: bevelEnabled
+					});
+					
+	var material = new THREE.MeshFaceMaterial( [ 
+					new THREE.MeshPhongMaterial( { color: 0xffffff, shading: THREE.FlatShading } ), // front
+					new THREE.MeshPhongMaterial( { color: 0xffffff, shading: THREE.SmoothShading } ) // side
+				] );
+
+	var textMesh = new THREE.Mesh( textGeo, material );
+	textMesh.position.y = location;
+	return textMesh;
 
 }
 
