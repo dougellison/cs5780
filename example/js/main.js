@@ -42,9 +42,12 @@ window.addEventListener('deviceorientation', function(event) {
 		scene.remove(gammaText);
 	}
 	
-	alphaText = createText(event.alpha, 100);
-	betaText = createText(event.beta, 200);
-	gammaText = createText(event.gamma, 300);
+	alphaText = createText(event.alpha, 50);
+	scene.add(alphaText);
+	betaText = createText(event.beta, 125);
+	scene.add(betaText);
+	gammaText = createText(event.gamma, 200);
+	scene.add(gammaText);
 	
 
 	
@@ -165,12 +168,12 @@ function render() {
 
 }
 function createText(text, location) {
-
+	var blah = "" + text;
 	height = 20,
 	size = 70,
 	hover = 30,
 
-	curveSegments = 4,
+	curveSegments = 1,
 
 	bevelThickness = 2,
 	bevelSize = 1.5,
@@ -182,7 +185,7 @@ function createText(text, location) {
 	style = "normal"; // normal italic
 
 	
-	var textGeo = new THREE.TextGeometry(text, {
+	var textGeo = new THREE.TextGeometry(blah, {
 					size: size,
 					height: height,
 					curveSegments: curveSegments,
