@@ -6,7 +6,7 @@ var particleLight, pointLight;
 var materials = [];
 var defaultRotateSize = 0.01;
 var rotateSize = defaultRotateSize;
-var alpha, beeta, gamma;
+var alpha, beta, gamma;
 var alphaText;
 var betaText;
 var gammaText;
@@ -29,25 +29,45 @@ window.addEventListener('deviceorientation', function(event) {
   //if (alpha != event.alpha || beta != event.beta || gamma != event.gamma)
 //	rotateSize = defaultRotateSize;
 	
-	//alpha = event.alpha;
-	//beta = event.beta;
-	//gamma = event.gamma;
-	if (alphaText) {
-		scene.remove(alphaText);
-	}
-	if (betaText) {
-		scene.remove(betaText);
-	}
-	if (gammaText) {
-		scene.remove(gammaText);
+	var roundedAlpha = Math.round(event.alpha);
+	var roundedBeta = Math.round(event.beta);
+	var roundedGamma = Math.round(event.gamma);
+	
+	if (roundedAlpha != alpha) {
+		alpha = roundedAlpha
+		if (alphaText) {
+			scene.remove(alphaText);
+		}
+		alphaText = createText(roundedAlpha, 50);
+		scene.add(alphaText);
 	}
 	
-	alphaText = createText(event.alpha, 50);
-	scene.add(alphaText);
-	betaText = createText(event.beta, 125);
-	scene.add(betaText);
-	gammaText = createText(event.gamma, 200);
-	scene.add(gammaText);
+	if (roundedBeta != beta) {
+		beta = roundedBeta;
+		if (betaText) {
+			scene.remove(betaText);
+		}
+		betaText = createText(roundedBeta, 125);
+		scene.add(betaText);
+
+
+	}
+	
+	if (roundedGamma != gamma) {
+		gamma = roundedGamma;
+		if (gammaText) {
+			scene.remove(gammaText);
+		}
+		gammaText = createText(roundedGamma, 200);
+		scene.add(gammaText);
+
+	}
+	
+	
+	
+	
+	
+	
 	
 
 	
