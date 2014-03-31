@@ -24,6 +24,7 @@ document.getElementById('button').addEventListener('click', function () {
 });
 
 
+
 window.addEventListener('deviceorientation', function(event) {
   //console.log(event.alpha + ' : ' + event.beta + ' : ' + event.gamma);
   //if (alpha != event.alpha || beta != event.beta || gamma != event.gamma)
