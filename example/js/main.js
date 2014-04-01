@@ -143,7 +143,7 @@ function init() {
 
 	//
 	if ( ! Detector.webgl ) {
-		reenderer = new THREE.CanvasRenderer();
+		renderer = new THREE.CanvasRenderer();
 	}
 	else {
 		renderer = new THREE.WebGLRenderer();
