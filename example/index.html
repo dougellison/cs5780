@@ -11,7 +11,7 @@
 		</style>
 	</head>
 	<body>
-		<button id="button">Click to go full screen3</button>
+		<button id="button">Click to go full screen</button>
 		<div id="mainDrawLocation" style="background-color: #000000"></div>
 		
 	</body>
@@ -21,6 +21,12 @@
 	<script src="js/threejs/Detector.js"></script> 
 	<script src="js/threejs/optimer_regular.typeface.js"></script> 
 	<script src="js/screenfull.min.js"></script>
+	
+	<script>
+		if (location.search && location.search.indexOf('laptop') != -1) {
+		$.getScript('http://remote-tilt.com/js/device-motion-polyfill.js');
+		}
+	</script>
 	<!-- <script src="http://remote-tilt.com/js/device-motion-polyfill.js"></script> -->
 	
 		<script type="text/javascript" src="js/main.js"></script>

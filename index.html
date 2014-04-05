@@ -144,237 +144,50 @@
 						</ul>
 					</section>
 				</section>
-
-					
 				<section>
-					<h3>Why use it?</h3>
+					<h3>Project 2</h3>
 					<ul>
-						<li>Client Side means responsive</li>
-						<li>Its Comprehensive</li>
-							<ul>
-								<li>Built in support for RESTFul operations</li>
-								<li>Vast templating possibilities</li>
-								<li>Testable</li>
-							</ul>
-						<li>Dependency Injection</li>
-						<li>Very large active community <a href="http://angular-ui.github.io/" target="blank">http://angular-ui.github.io/</a></li>
-						<li>Lots of people use it <a href="http://builtwith.angularjs.org/" target="blank">http://builtwith.angularjs.org/</a></li>
-						<li>Two Way data binding</li>
-						<li>Create custom components</li>
+						<li>Mobile game</li>
+						<li>Target all newer phones</li>
+						<li>No install</li>
+						<li>Browser based</li>
+						<li>ThreeJS (Canvas Render or WebGL)</li>
 					</ul>
 				</section>
-				
 				<section>
-					<section>
-						<h3>How does it compare to BackboneJS</h3>
-						<br>
-						<p>Below are excerpts directly from the BackboneJS website <a href="http://backbonejs.org/#faq">http://backbonejs.org/#faq</a></p>
-						<ul>
-							<li>View agnostic</li>
-							<li>Goal is to be a library</li>
-							<li>Avoids Two way data-binding</li>
-							<li>The focus is on supplying you with helpful methods to manipulate and query your data, not on HTML widgets or reinventing the JavaScript object model.</li>
-							<li>HTML and Logic are completely separated</li>
-						</ul>
-					</section>
-					<section>
-						<h3>Application Comparison</h3>
-						<p>One of the best ways to evaluate a framework or library is to implement a simple application.  Just such a thing already exists for the most popular of web libraries we'll be covering <a href="http://todomvc.com/" target="blank">ToDoMVC</a>
-						</p>
-					</section>
-					<section>
-						<h3>Input Section</h3>
-						<pre>
-							<code>
-<!-- Backbone -->
-<header id="header">
-  <h1>todos</h1>
-  <input id="new-todo" placeholder="What needs to be done?" autofocus>
-</header>
-
-<!--Angular -->
-<header id="header">
-  <h1>todos</h1>
-  <form id="todo-form" ng-submit="addTodo()">
-    <input id="new-todo" ng-model="newTodo" placeholder="What needs to be done?" autofocus>
-  </form>
-</header>
-							</code>
-						</pre>
-					</section>
-					<section>
-						<h3>Another Example</h3>
-						<pre >
-							<code data-trim style="width:1300px; height:700px;margin-left:-300px">
-<!-- Backbone -->
-<div id="main">
-    <input id="toggle-all" type="checkbox">
-    <label for="toggle-all">Mark all as complete</label>
-    <ul id="todo-list"></ul>
-</div>
-
-<!--Angular -->
-<div id="main" ng-show="todos.length" ng-cloak>
-    <input id="toggle-all" type="checkbox" ng-model="allChecked" ng-click="markAll(allChecked)">
-    <label for="toggle-all">Mark all as complete</label>
-    <ul id="todo-list">
-        <li ng-repeat="todo in todos | filter:statusFilter" ng-class="{completed: todo.completed, editing: todo == editedTodo}">
-            <div class="view">
-                <input class="toggle" type="checkbox" ng-model="todo.completed">
-                <label ng-dblclick="editTodo(todo)">{{todo.title}}</label>
-                <button class="destroy" ng-click="removeTodo(todo)"></button>
-            </div>
-            <form ng-submit="doneEditing(todo)">
-                <input class="edit" ng-model="todo.title" todo-escape="revertEditing(todo)" todo-blur="doneEditing(todo)" todo-focus="todo == editedTodo">
-            </form>
-        </li>
-    </ul>
-</div>
-						</code>
-						</pre>
-					</section>
-					<section>
-						<h3>Backbone View</h3>
-						<p>As it turns out Backbones insistence on not having anything to do with DOM manipulation splits the HTML and generation apart.</p>
-						<pre>
-							<code>
-// The DOM element for a todo item...
-app.TodoView = Backbone.View.extend({
-//... is a list tag.
-tagName:  'li',
-
-// Cache the template function for a single item.
-template: _.template($('#item-template').html()),
-
-// The DOM events specific to an item.
-events: {
-  'click .toggle': 'toggleCompleted',
-  'dblclick label': 'edit',
-  'click .destroy': 'clear',
-  'keypress .edit': 'updateOnEnter',
-  'blur .edit': 'close'
-},
-							</code>
-						</pre>
-					</section>
-					<section>
-						<h3>Item Template</h3>
-						<pre>
-							<code>
-<script type="text/template" id="item-template">
-  <div class="view">
-    <input class="toggle" type="checkbox" <%= completed ? 'checked' : '' %>>
-    <label><%- title %></label>
-    <button class="destroy"></button>
-  </div>
-  <input class="edit" value="<%- title %>">
-</script>
-							</code>
-						</pre>
-					</section>
-					<section>
-						<h3>Questions so far?</h3>
-					</section>
+					<h3>Game Basics</h3>
+					<ul>
+						<li>Control based on tilt of phone</li>
+						<li>Turn all tiles one color</li>
+						<li>Each time a tile is touched it swaps color</li>
+					</ul>
 				</section>
 				<section>
-					<section>
-						<h3>Controllers</h3>
-						<ul>
-							<li>Provide Encapsulation</li>
-							<li>Place to store business logic</li>
-							<li>Service References</li>
-							
-						</ul>	
-					</section>
-					<section>
-					<h3><a href="http://dougellison.github.io/examples/controller-example" target="blank">Controller Example</a></h3>
-						<pre>
-							<code>
-var controllers = angular.module('myApp.controllers', []);
-controllers.controller('Controller1', function($scope) {
-  $scope.helloMessageOne = "Hello from Controller 1";
-})
-controllers.controller('Controller2', function($scope) {
-  $scope.helloMessageOne = "Hello from Controller 2";
-})
-<!-- HTML -->
-<div ng-controller="Controller1">
-  {{helloMessageOne}}
-</div>
-<div ng-controller="Controller2">
-  {{helloMessageOne}}
-</div>
-
-							</code>
-						</pre>
-					</section>
+					<h3>Progress so far</h3>
+					<ul>
+						<li>Canvas and WebGL detection</li>
+						<li>Sphere created</li>
+						<li>Device Orientation Detected</li>
+						<li>Full screen</li>
+					</ul>
 				</section>
 				<section>
-					<section>
-						<h3>$Scope</h3>
-							<ul>
-								<li>What gets exposed to the page</li>
-								<li>Bound within controller</li>
-								<li>Supports Watches and what AngularJS uses to know things have changed</li>
-							</ul>
-					</section>
-					<section>
-						<pre>
-							<code>
-controllers.controller('Controller1', function($scope) {
-  $scope.helloMessageOne = "Hello from Controller 1";
-  $scope.sayHi = function() {
-    alert('Hello there');
-  }
-  
-  $scope.object = {};
-  $scope.object.attribute = "Attribute";
-  
-  $scope.attribute = "Some Value";
-})	
-<!--HTML CODE-->
-{{helloMessageOne}}
-<button ng-click="sayHi()">Click me to say hello</button>
-							</code>
-						</pre>
-					</section>
+					<h3>Remaining</h3>
+					<ul>
+						<li>Implement Acceleration</li>
+						<li>Collision Detection</li>
+						<li>Build Levels</li>
+					</ul>
 				</section>
 				<section>
-					<section>
-						<h3>Strongest Attributes</h3>
-						<ul>
-							<li>Two Way Data Binding</li>
-							<li>Ties Data to View</li>
-							<li>Directives</li>
-						</ul>
-					</section>
-					<section>
-						<h3>What is Two way data binding?</h3>
-						<a href="http://dougellison.github.io/examples/data-binding" target="blank">Data-Binding Example</a>
-					</section>
-					<section>
-						<h3>Directives DUN DUN DUNNNN</h3>
-							<ul>
-							<li>What is it?
-								<ul>
-									<li>Allow for the generation of customized HTML elements</li>
-									<li>Can be attributes / classes / or completely new elements</li>
-								</ul>
-							</li>
-							<li>Why is it so cool?
-								<ul>
-									<li>Reusable</li>
-									<li>Extremely flexible</li>
-									<li>Sky is the limit with what you can do with them</li>
-								</ul>
-							</li>
-							<li><a href="http://dougellison.github.io/examples/directive-example" target="blank">Demo time!</a></li>	
-							</ul>
-							
-					</section>
+					<h3>Try it out</h3>
+					<ul>
+						<li>Laptop: <a href="http://dougellison.github.io/example">http://dougellison.github.io/example</a></li>
+						<li></li>
+						<li></li>
+					</ul>
 				</section>
-			</div>
-		</div>
+</section>					
 		<script src="lib/js/head.min.js"></script>
 		<script src="js/reveal.min.js"></script>
 
