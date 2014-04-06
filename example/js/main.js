@@ -10,6 +10,9 @@ var alpha, beta, gamma;
 var alphaText;
 var betaText;
 var gammaText;
+var sphere;
+var roundedAlpha, roundedBeta, roundedGamma;
+
 
 init();
 animate();
@@ -23,6 +26,15 @@ document.getElementById('button').addEventListener('click', function () {
     }
 });
 
+document.getElementById("move").addEventListener('click', function() {
+	if ($('#checkbox').is(':checked')) {
+			sphere.position.z += 10;
+	}
+	else {
+			sphere.position.z -= 10;
+	}
+});
+
 
 
 window.addEventListener('deviceorientation', function(event) {
@@ -30,9 +42,9 @@ window.addEventListener('deviceorientation', function(event) {
   //if (alpha != event.alpha || beta != event.beta || gamma != event.gamma)
 //	rotateSize = defaultRotateSize;
 	
-	var roundedAlpha = Math.round(event.alpha);
-	var roundedBeta = Math.round(event.beta);
-	var roundedGamma = Math.round(event.gamma);
+	roundedAlpha = Math.round(event.alpha);
+	roundedBeta = Math.round(event.beta);
+	roundedGamma = Math.round(event.gamma);
 	
 	if (roundedAlpha != alpha) {
 		alpha = roundedAlpha
@@ -107,13 +119,14 @@ function init() {
 	scene.add( line );
 
 	
-	var sphere, geometry, material;
+	var geometry, material;
 	
 	//textMesh = createText()
 	//scene.add(textMesh);
 	var geometry = new THREE.SphereGeometry( 50, 32, 32 );
 	var material = new THREE.MeshBasicMaterial( {color: 0x33ccff, wireframe: true} );
-	var sphere = new THREE.Mesh( geometry, material );
+	sphere = new THREE.Mesh( geometry, material );
+	sphere.geometry.dynamic = true;
 	scene.add( sphere );
 
 	//particleLight = new THREE.Mesh( new THREE.SphereGeometry( 4, 8, 8 ), new THREE.MeshBasicMaterial( { color: 0xffffff } ) );
@@ -191,7 +204,23 @@ function render() {
 //		object.rotation.y += 0.005;
 	//}
 	//if (rotateSize > 0)
+	
 	//	rotateSize -= 0.001;
+	
+	if (roundedBeta < 0) {
+		sphere.position.z -=1;
+	}
+	else if (roundedBeta > 0) {
+		sphere.position.z += 1;
+	}
+	
+	if (roundedGamma < 0) {
+		sphere.position.x -=1;	
+	}
+	else if (roundedGamma >1) {
+		sphere.position.x +=1;
+	}
+	
 	renderer.render( scene, camera );
 
 }
