@@ -25,7 +25,7 @@ document.getElementById('button').addEventListener('click', function () {
         // Ignore or do something else
     }
 });
-
+/*
 document.getElementById("move").addEventListener('click', function() {
 	if ($('#checkbox').is(':checked')) {
 			sphere.position.z += 10;
@@ -34,7 +34,7 @@ document.getElementById("move").addEventListener('click', function() {
 			sphere.position.z -= 10;
 	}
 });
-
+*/
 
 
 window.addEventListener('deviceorientation', function(event) {
