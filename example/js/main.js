@@ -12,7 +12,7 @@ var betaText;
 var gammaText;
 var sphere;
 var roundedAlpha, roundedBeta, roundedGamma;
-
+var accelerationIncludingGravity;
 
 init();
 animate();
@@ -35,13 +35,21 @@ document.getElementById("move").addEventListener('click', function() {
 	}
 });
 
+var deviceMotion = function(eventData) {
+	console.log('AccelerationData: X: ' + eventData.accelerationIncludingGravity.x + ' Y:'+ eventData.accelerationIncludingGravity.y + ' Z: '+ eventData.accelerationIncludingGravity.z);
+	accelerationIncludingGravity = eventData.accelerationIncludingGravity;
+}
+if (window.DeviceMotionEvent) {
+	window.addEventListener('devicemotion', deviceMotion, false);
+}
+
 
 
 window.addEventListener('deviceorientation', function(event) {
   //console.log(event.alpha + ' : ' + event.beta + ' : ' + event.gamma);
   //if (alpha != event.alpha || beta != event.beta || gamma != event.gamma)
 //	rotateSize = defaultRotateSize;
-	alert('Hey I got the event');
+	//alert('Hey I got the event');
 	
 	roundedAlpha = Math.round(event.alpha);
 	roundedBeta = Math.round(event.beta);
@@ -198,11 +206,17 @@ function render() {
 
 	camera.lookAt( scene.position );
 
-	if (roundedBeta && roundedBeta != 0)
-		sphere.position.z += roundedBeta / 10;
+	//if (roundedBeta && roundedBeta != 0)
+	//	sphere.position.z += roundedBeta / 10;
 
-	if (roundedGamma && roundedGamma != 0)
-		sphere.position.x += roundedGamma / 10;	
+	//if (roundedGamma && roundedGamma != 0)
+	//	sphere.position.x += roundedGamma / 10;	
+	if (accelerationIncludingGravity) {
+		sphere.position.x += accelerationIncludingGravity.x /5;
+		sphere.position.z -= accelerationIncludingGravity.y /5;
+		
+		
+	}
 	
 	renderer.render( scene, camera );
 
