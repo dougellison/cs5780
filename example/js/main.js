@@ -46,6 +46,8 @@ window.addEventListener('deviceorientation', function(event) {
 	roundedBeta = Math.round(event.beta);
 	roundedGamma = Math.round(event.gamma);
 	
+	
+	alert('Hey I got the event');
 	if (roundedAlpha != alpha) {
 		alpha = roundedAlpha
 		
