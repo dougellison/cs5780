@@ -48,31 +48,40 @@ window.addEventListener('deviceorientation', function(event) {
 	
 	if (roundedAlpha != alpha) {
 		alpha = roundedAlpha
-		if (alphaText) {
-			scene.remove(alphaText);
-		}
-		alphaText = createText(roundedAlpha, 50);
-		scene.add(alphaText);
+		
+		
+			/*if (alphaText) {
+				scene.remove(alphaText);
+			}
+			alphaText = createText(roundedAlpha, 50);
+			scene.add(alphaText);
+			*/
 	}
 	
 	if (roundedBeta != beta) {
+	
 		beta = roundedBeta;
+		/*
 		if (betaText) {
 			scene.remove(betaText);
 		}
 		betaText = createText(roundedBeta, 125);
 		scene.add(betaText);
+		*/
 
 
 	}
 	
 	if (roundedGamma != gamma) {
 		gamma = roundedGamma;
+		
+		/*
 		if (gammaText) {
 			scene.remove(gammaText);
 		}
 		gammaText = createText(roundedGamma, 200);
 		scene.add(gammaText);
+		*/
 
 	}
 	
@@ -196,30 +205,11 @@ function render() {
 
 	camera.lookAt( scene.position );
 
-	//for ( var i = 0, l = objects.length; i < l; i ++ ) {
+	if (roundedBeta && roundedBeta != 0)
+		sphere.position.z += roundedBeta / 10;
 
-		//var object = objects[ i ];
-
-		//object.rotation.x += rotateSize;
-//		object.rotation.y += 0.005;
-	//}
-	//if (rotateSize > 0)
-	
-	//	rotateSize -= 0.001;
-	
-	if (roundedBeta < 0) {
-		sphere.position.z -=1;
-	}
-	else if (roundedBeta > 0) {
-		sphere.position.z += 1;
-	}
-	
-	if (roundedGamma < 0) {
-		sphere.position.x -=1;	
-	}
-	else if (roundedGamma >1) {
-		sphere.position.x +=1;
-	}
+	if (roundedGamma && roundedGamma != 0)
+		sphere.position.x += roundedGamma / 10;	
 	
 	renderer.render( scene, camera );
 
