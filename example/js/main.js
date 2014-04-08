@@ -100,7 +100,8 @@ window.addEventListener('deviceorientation', function(event) {
 function init() {
 
 	container = document.createElement( 'div' );
-	
+	stats = new Stats();
+	container.appendChild( stats.domElement );
 	
 	document.body.appendChild( container );
 
@@ -197,7 +198,7 @@ function animate() {
 	requestAnimationFrame( animate );
 
 	render();
-
+	stats.update();
 }
 
 function render() {
