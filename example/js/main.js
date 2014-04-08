@@ -142,10 +142,10 @@ function init() {
 
 	//particleLight = new THREE.Mesh( new THREE.SphereGeometry( 4, 8, 8 ), new THREE.MeshBasicMaterial( { color: 0xffffff } ) );
 	
-	var pointLight = new THREE.PointLight( 0xffffff, 1.5 );
-	pointLight.position.set( 0, 100, 90 );
-	pointLight.color.setHSL( Math.random(), 1, 0.5 );
-	scene.add(pointLight);
+	//var pointLight = new THREE.PointLight( 0xffffff, 1.5 );
+	//pointLight.position.set( 0, 100, 90 );
+	//pointLight.color.setHSL( Math.random(), 1, 0.5 );
+	//scene.add(pointLight);
 	//scene.add( particleLight );
 
 	// Lights
