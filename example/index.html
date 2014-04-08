@@ -42,6 +42,10 @@
 		//	alert('Hey it does work3');
 		//}
 		
+		window.addEventListener('orientationchange', function() {
+			alert('HOLY ROTATING SCREENS BATMAN:' + window.orientation + " " + screen.width);
+		}, false);
+		
 
 		</script>
 	<!-- <script src="http://remote-tilt.com/js/device-motion-polyfill.js"></script> -->
