@@ -41,13 +41,14 @@ window.addEventListener('deviceorientation', function(event) {
   //console.log(event.alpha + ' : ' + event.beta + ' : ' + event.gamma);
   //if (alpha != event.alpha || beta != event.beta || gamma != event.gamma)
 //	rotateSize = defaultRotateSize;
+	alert('Hey I got the event');
 	
 	roundedAlpha = Math.round(event.alpha);
 	roundedBeta = Math.round(event.beta);
 	roundedGamma = Math.round(event.gamma);
 	
 	
-	//alert('Hey I got the event');
+	
 	if (roundedAlpha != alpha) {
 		alpha = roundedAlpha
 		
