@@ -134,7 +134,7 @@ function init() {
 	
 	//textMesh = createText()
 	//scene.add(textMesh);
-	var geometry = new THREE.SphereGeometry( 50, 32, 32 );
+	var geometry = new THREE.SphereGeometry( 50, 10, 10 );
 	var material = new THREE.MeshBasicMaterial( {color: 0x33ccff, wireframe: true} );
 	sphere = new THREE.Mesh( geometry, material );
 	sphere.geometry.dynamic = true;
@@ -166,12 +166,12 @@ function init() {
 	//scene.add( pointLight );
 
 	//
-	//if ( ! Detector.webgl ) {
-	//	renderer = new THREE.CanvasRenderer();
-	//}
-	//else {
+	if ( ! Detector.webgl ) {
+		renderer = new THREE.CanvasRenderer();
+	}
+	else {
 		renderer = new THREE.WebGLRenderer();
-	//}
+	}
 	
 	renderer.setSize( window.innerWidth, window.innerHeight );
 
