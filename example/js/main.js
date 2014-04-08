@@ -25,7 +25,7 @@ document.getElementById('button').addEventListener('click', function () {
         // Ignore or do something else
     }
 });
-/*
+
 document.getElementById("move").addEventListener('click', function() {
 	if ($('#checkbox').is(':checked')) {
 			sphere.position.z += 10;
@@ -34,7 +34,7 @@ document.getElementById("move").addEventListener('click', function() {
 			sphere.position.z -= 10;
 	}
 });
-*/
+
 
 
 window.addEventListener('deviceorientation', function(event) {
@@ -47,7 +47,7 @@ window.addEventListener('deviceorientation', function(event) {
 	roundedGamma = Math.round(event.gamma);
 	
 	
-	alert('Hey I got the event');
+	//alert('Hey I got the event');
 	if (roundedAlpha != alpha) {
 		alpha = roundedAlpha
 		
@@ -86,17 +86,7 @@ window.addEventListener('deviceorientation', function(event) {
 		*/
 
 	}
-	
-	
-	
-	
-	
-	
-	
-
-	
-	
-});
+},false);
 
 function init() {
 
