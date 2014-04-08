@@ -166,12 +166,12 @@ function init() {
 	//scene.add( pointLight );
 
 	//
-	if ( ! Detector.webgl ) {
-		renderer = new THREE.CanvasRenderer();
-	}
-	else {
+	//if ( ! Detector.webgl ) {
+	//	renderer = new THREE.CanvasRenderer();
+	//}
+	//else {
 		renderer = new THREE.WebGLRenderer();
-	}
+	//}
 	
 	renderer.setSize( window.innerWidth, window.innerHeight );
 
