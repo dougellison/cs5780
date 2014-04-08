@@ -213,8 +213,8 @@ function render() {
 	//if (roundedGamma && roundedGamma != 0)
 	//	sphere.position.x += roundedGamma / 10;	
 	if (accelerationIncludingGravity) {
-		sphere.position.x += accelerationIncludingGravity.x /5;
-		sphere.position.z -= accelerationIncludingGravity.y /5;
+		sphere.position.x -= accelerationIncludingGravity.x /5;
+		sphere.position.z += accelerationIncludingGravity.y /5;
 		
 		
 	}
