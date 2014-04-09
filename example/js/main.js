@@ -204,9 +204,9 @@ function animate() {
 
 function render() {
 
-	var timer = 0.0001 * Date.now();
+	//var timer = 0.0001 * Date.now();
 
-	camera.lookAt( scene.position );
+	//camera.lookAt( scene.position );
 
 	//if (roundedBeta && roundedBeta != 0)
 	//	sphere.position.z += roundedBeta / 10;
