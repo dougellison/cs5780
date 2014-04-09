@@ -36,17 +36,18 @@ document.getElementById("move").addEventListener('click', function() {
 });
 */
 
-var deviceMotion = function(eventData) {
+var deviceMotionLocal = function(eventData) {
 	//console.log('AccelerationData: X: ' + eventData.accelerationIncludingGravity.x + ' Y:'+ eventData.accelerationIncludingGravity.y + ' Z: '+ eventData.accelerationIncludingGravity.z);
+	//var stuff = deviceMotion(eventData);
 	accelerationIncludingGravity = eventData.accelerationIncludingGravity;
 }
 if (window.DeviceMotionEvent) {
-	window.addEventListener('devicemotion', deviceMotion, false);
+	window.addEventListener('devicemotion', deviceMotionLocal, false);
 }
 
 
 
-window.addEventListener('asdfasdf', function(event) {
+window.addEventListener('deviceorientation', function(event) {
   //console.log(event.alpha + ' : ' + event.beta + ' : ' + event.gamma);
   //if (alpha != event.alpha || beta != event.beta || gamma != event.gamma)
 //	rotateSize = defaultRotateSize;
@@ -100,6 +101,7 @@ window.addEventListener('asdfasdf', function(event) {
 
 function init() {
 
+	mo.init();
 	container = document.createElement( 'div' );
 	stats = new Stats();
 	container.appendChild( stats.domElement );
@@ -128,7 +130,7 @@ function init() {
 	}
 
 	var line = new THREE.Line( geometry, line_material, THREE.LinePieces );
-	//scene.add( line );
+	scene.add( line );
 
 	
 	var geometry, material;
@@ -214,8 +216,8 @@ function render() {
 	//if (roundedGamma && roundedGamma != 0)
 	//	sphere.position.x += roundedGamma / 10;	
 	if (accelerationIncludingGravity) {
-		sphere.position.x -= accelerationIncludingGravity.x /5;
-		sphere.position.z += accelerationIncludingGravity.y /5;
+		sphere.position.x -= accelerationIncludingGravity.x /.5;
+		sphere.position.z += accelerationIncludingGravity.y /.5;
 		
 		
 	}
