@@ -128,7 +128,7 @@ function init() {
 	}
 
 	var line = new THREE.Line( geometry, line_material, THREE.LinePieces );
-	scene.add( line );
+	//scene.add( line );
 
 	
 	var geometry, material;
