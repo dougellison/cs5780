@@ -46,7 +46,7 @@ if (window.DeviceMotionEvent) {
 
 
 
-window.addEventListener('deviceorientation', function(event) {
+window.addEventListener('asdfasdf', function(event) {
   //console.log(event.alpha + ' : ' + event.beta + ' : ' + event.gamma);
   //if (alpha != event.alpha || beta != event.beta || gamma != event.gamma)
 //	rotateSize = defaultRotateSize;
