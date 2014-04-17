@@ -13,6 +13,7 @@ var gammaText;
 var sphere;
 var roundedAlpha, roundedBeta, roundedGamma;
 var accelerationIncludingGravity;
+var planes = new Array();
 
 init();
 animate();
@@ -25,33 +26,19 @@ document.getElementById('button').addEventListener('click', function () {
         // Ignore or do something else
     }
 });
-/*
-document.getElementById("move").addEventListener('click', function() {
-	if ($('#checkbox').is(':checked')) {
-			sphere.position.z += 10;
-	}
-	else {
-			sphere.position.z -= 10;
-	}
+
+document.getElementById('reset').addEventListener('click', function() {
+	sphere.position = new THREE.Vector3(0,0,0);
 });
-*/
 
 var deviceMotionLocal = function(eventData) {
-	//console.log('AccelerationData: X: ' + eventData.accelerationIncludingGravity.x + ' Y:'+ eventData.accelerationIncludingGravity.y + ' Z: '+ eventData.accelerationIncludingGravity.z);
-	//var stuff = deviceMotion(eventData);
 	accelerationIncludingGravity = eventData.accelerationIncludingGravity;
 }
 if (window.DeviceMotionEvent) {
 	window.addEventListener('devicemotion', deviceMotionLocal, false);
 }
 
-
-
 window.addEventListener('deviceorientation', function(event) {
-  //console.log(event.alpha + ' : ' + event.beta + ' : ' + event.gamma);
-  //if (alpha != event.alpha || beta != event.beta || gamma != event.gamma)
-//	rotateSize = defaultRotateSize;
-	//alert('Hey I got the event');
 	
 	roundedAlpha = Math.round(event.alpha);
 	roundedBeta = Math.round(event.beta);
@@ -109,10 +96,30 @@ function init() {
 	document.body.appendChild( container );
 
 	camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
-	camera.position.set( 0, 150	, 800 );
-
+	camera.position.set( 0, 550, 800 );
+	camera.lookAt(new THREE.Vector3(0,0,0));
+	var startingPointX = -400;
+	var startingPointZ = -400;
 	scene = new THREE.Scene();
+	
+	for (var i2 = 0; i2 < 40; i2++) {
+		for (var i = 0; i < 40; i++) {
+			var tempPlane = new THREE.Mesh(new THREE.PlaneGeometry(20, 20), new THREE.MeshNormalMaterial({wireframe:true}));
+			tempPlane.rotation.x = 4.8
+			tempPlane.position.y = -20;
+			tempPlane.position.x = startingPointX + (i * 20);
+			tempPlane.position.z = startingPointZ + (i2 * 20);
+			scene.add(tempPlane);
+			planes.push(tempPlane);
+		}
+	}
 
+
+	
+	
+
+
+	
 	// Grid
 
 	var line_material = new THREE.LineBasicMaterial( { color: 0x303030 } ),
@@ -130,14 +137,14 @@ function init() {
 	}
 
 	var line = new THREE.Line( geometry, line_material, THREE.LinePieces );
-	scene.add( line );
+	//scene.add( line );
 
 	
 	var geometry, material;
 	
 	//textMesh = createText()
 	//scene.add(textMesh);
-	var geometry = new THREE.SphereGeometry( 50, 10, 10 );
+	var geometry = new THREE.SphereGeometry( 20, 10, 10 );
 	var material = new THREE.MeshBasicMaterial( {color: 0x33ccff, wireframe: true} );
 	sphere = new THREE.Mesh( geometry, material );
 	sphere.geometry.dynamic = true;
@@ -208,7 +215,7 @@ function render() {
 
 	//var timer = 0.0001 * Date.now();
 
-	//camera.lookAt( scene.position );
+	//camera.lookAt( sphere.position );
 
 	//if (roundedBeta && roundedBeta != 0)
 	//	sphere.position.z += roundedBeta / 10;
@@ -216,11 +223,15 @@ function render() {
 	//if (roundedGamma && roundedGamma != 0)
 	//	sphere.position.x += roundedGamma / 10;	
 	if (accelerationIncludingGravity) {
-		sphere.position.x -= accelerationIncludingGravity.x /.5;
-		sphere.position.z += accelerationIncludingGravity.y /.5;
+		sphere.position.x -= accelerationIncludingGravity.x /1;
+		sphere.position.z += accelerationIncludingGravity.y /1;
+		//sphere.position.x -= accelerationIncludingGravity.x /.5;
+		//sphere.position.z += accelerationIncludingGravity.y /.5;
 		
 		
 	}
+	//plane.rotation.x += .01;
+	
 	
 	renderer.render( scene, camera );
 

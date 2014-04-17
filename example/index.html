@@ -17,6 +17,7 @@
 	</head>
 	<body>
 		<button id="button">Click to go full screen</button>
+		<button id="reset">Click to reset</button>
 		<!--<button id="move">Move left / right</button>		
 		<input id ="checkbox" type="checkbox"/> Move left -->
 		<div id="mainDrawLocation" style="background-color: #000000"></div>
@@ -33,7 +34,7 @@
 	
 	<script>
 		if (location.search && location.search.indexOf('laptop') != -1) {
-		$.getScript('http://remote-tilt.com/js/device-motion-polyfill.js?key=951');
+		$.getScript('http://remote-tilt.com/js/device-motion-polyfill.js?key=someKey');
 		//$.getScript('http://remote-tilt.com/js/device-motion-polyfill.js');
 		}
 		
