@@ -91,7 +91,6 @@ window.addEventListener('deviceorientation', function(event) {
 
 function init() {
 
-	mo.init();
 	container = document.createElement( 'div' );
 	stats = new Stats();
 	container.appendChild( stats.domElement );
@@ -99,7 +98,7 @@ function init() {
 	document.body.appendChild( container );
 
 	//camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
-	camera = new THREE.OrthographicCamera( window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, 1, 2000 );
+	camera = new THREE.OrthographicCamera( window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, 1, 1000 );
 	camera.position.set( 0, 0, 200 );
 	camera.lookAt(new THREE.Vector3(0,0,0));
 	var startingPointX = -50;
@@ -167,7 +166,7 @@ function init() {
 
 	// Lights
 
-	scene.add( new THREE.AmbientLight( 0x111111 ) );
+	//scene.add( new THREE.AmbientLight( 0x111111 ) );
 
 	//var directionalLight = new THREE.DirectionalLight( /*Math.random() * */ 0xffffff, 0.125 );
 
@@ -230,8 +229,8 @@ function render() {
 	//if (roundedGamma && roundedGamma != 0)
 	//	sphere.position.x += roundedGamma / 10;	
 	if (accelerationIncludingGravity) {
-		sphere.position.x += accelerationIncludingGravity.x /3.5;
-		sphere.position.y += accelerationIncludingGravity.y /3.5;
+		sphere.position.x -= accelerationIncludingGravity.x /3.5;
+		sphere.position.y -= accelerationIncludingGravity.y /3.5;
 		//sphere.position.x -= accelerationIncludingGravity.x /.5;
 		//sphere.position.z += accelerationIncludingGravity.y /.5;
 		
