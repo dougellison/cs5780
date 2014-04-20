@@ -15,6 +15,10 @@ var roundedAlpha, roundedBeta, roundedGamma;
 var accelerationIncludingGravity;
 var planes = new Array();
 
+var currentPlaneName = "0_0";
+
+var line;
+
 init();
 animate();
 
@@ -27,7 +31,14 @@ document.getElementById('button').addEventListener('click', function () {
     }
 });
 document.getElementById('movePlane').addEventListener('click', function () {
-    planes[0].position.x -= 10;
+    planes[0].position.z -= 10;
+	//camera.position.x += 10;
+	//camera.position.y += 10;
+	
+	camera.position.z += 10;
+	camera.lookAt(new THREE.Vector3(0,0,0));
+	camera.updateProjectionMatrix();
+	
 });
 
 document.getElementById('reset').addEventListener('click', function() {
@@ -99,8 +110,8 @@ function init() {
 
 	//camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
 	camera = new THREE.OrthographicCamera( window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, 1, 1000 );
-	camera.position.set( 0, 0, 200 );
-	camera.lookAt(new THREE.Vector3(0,0,0));
+	camera.position.set( 0, 0, 300 );
+	//camera.lookAt(new THREE.Vector3(0,0,0));
 	var startingPointX = -50;
 	var startingPointY = -50;
 	scene = new THREE.Scene();
@@ -109,11 +120,12 @@ function init() {
 	
 	for (var i2 = 0; i2 < 2; i2++) {
 		for (var i = 0; i < 2; i++) {
-			var tempPlane = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.MeshBasicMaterial({color: 'green', wireframe:true}));
+			var tempPlane = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.MeshBasicMaterial({color: 'green'}));
 			//tempPlane.rotation.x = 4.8
-			tempPlane.position.z = -20;
+			tempPlane.position.z = -50;
 			tempPlane.position.x = startingPointX + (i * 200);
 			tempPlane.position.y = startingPointY + (i2 * 200);
+			tempPlane.name = i2 + "_" + i;
 			tempPlane.geometry.dynamic = true;
 			scene.add(tempPlane);
 			planes.push(tempPlane);
@@ -229,13 +241,36 @@ function render() {
 	//if (roundedGamma && roundedGamma != 0)
 	//	sphere.position.x += roundedGamma / 10;	
 	if (accelerationIncludingGravity) {
-		sphere.position.x -= accelerationIncludingGravity.x /3.5;
-		sphere.position.y -= accelerationIncludingGravity.y /3.5;
+		sphere.position.x += accelerationIncludingGravity.y /3.5;
+		sphere.position.y -= accelerationIncludingGravity.x /3.5;
 		//sphere.position.x -= accelerationIncludingGravity.x /.5;
 		//sphere.position.z += accelerationIncludingGravity.y /.5;
-		
-		
 	}
+	var raycaster = new THREE.Raycaster( sphere.position, new THREE.Vector3(0,0,-1));
+	var intersects = raycaster.intersectObjects(planes, false);
+	if (intersects.length > 0) {
+		for (var i = 0; i < intersects.length; i++) {
+			console.log(intersects[i].object.name);
+			if (currentPlaneName != intersects[i].object.name) {
+				intersects[i].object.material.color= new THREE.Color('red');
+				currentPlaneName = intersects[i].object.name;
+			}
+		}
+	}
+	//var material = new THREE.LineBasicMaterial({
+	//color: 0x0000ff
+	//});
+
+	//scene.remove(line);
+	//var geometry = new THREE.Geometry();
+	//geometry.vertices.push( sphere.position );
+	//geometry.vertices.push( new THREE.Vector3( 0, 0, -1 ) );
+
+
+	//line = new THREE.Line( geometry, material );
+	//scene.add( line );
+	
+	
 	//plane.rotation.x += .01;
 	
 	
