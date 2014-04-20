@@ -26,6 +26,9 @@ document.getElementById('button').addEventListener('click', function () {
         // Ignore or do something else
     }
 });
+document.getElementById('movePlane').addEventListener('click', function () {
+    planes[0].position.x -= 10;
+});
 
 document.getElementById('reset').addEventListener('click', function() {
 	sphere.position = new THREE.Vector3(0,0,0);
@@ -95,25 +98,29 @@ function init() {
 	
 	document.body.appendChild( container );
 
-	camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
-	camera.position.set( 0, 550, 800 );
+	//camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
+	camera = new THREE.OrthographicCamera( window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, 1, 2000 );
+	camera.position.set( 0, 0, 200 );
 	camera.lookAt(new THREE.Vector3(0,0,0));
-	var startingPointX = -400;
-	var startingPointZ = -400;
+	var startingPointX = -50;
+	var startingPointY = -50;
 	scene = new THREE.Scene();
 	
-	for (var i2 = 0; i2 < 40; i2++) {
-		for (var i = 0; i < 40; i++) {
-			var tempPlane = new THREE.Mesh(new THREE.PlaneGeometry(20, 20), new THREE.MeshNormalMaterial({wireframe:true}));
-			tempPlane.rotation.x = 4.8
-			tempPlane.position.y = -20;
-			tempPlane.position.x = startingPointX + (i * 20);
-			tempPlane.position.z = startingPointZ + (i2 * 20);
+	
+	
+	for (var i2 = 0; i2 < 2; i2++) {
+		for (var i = 0; i < 2; i++) {
+			var tempPlane = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.MeshBasicMaterial({color: 'green', wireframe:true}));
+			//tempPlane.rotation.x = 4.8
+			tempPlane.position.z = -20;
+			tempPlane.position.x = startingPointX + (i * 200);
+			tempPlane.position.y = startingPointY + (i2 * 200);
+			tempPlane.geometry.dynamic = true;
 			scene.add(tempPlane);
 			planes.push(tempPlane);
 		}
 	}
-
+	
 
 	
 	
@@ -223,8 +230,8 @@ function render() {
 	//if (roundedGamma && roundedGamma != 0)
 	//	sphere.position.x += roundedGamma / 10;	
 	if (accelerationIncludingGravity) {
-		sphere.position.x -= accelerationIncludingGravity.x /1;
-		sphere.position.z += accelerationIncludingGravity.y /1;
+		sphere.position.x += accelerationIncludingGravity.x /3.5;
+		sphere.position.y += accelerationIncludingGravity.y /3.5;
 		//sphere.position.x -= accelerationIncludingGravity.x /.5;
 		//sphere.position.z += accelerationIncludingGravity.y /.5;
 		
