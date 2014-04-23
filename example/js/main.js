@@ -35,8 +35,7 @@ document.getElementById('movePlane').addEventListener('click', function () {
 	//camera.position.x += 10;
 	//camera.position.y += 10;
 	
-	camera.position.z += 10;
-	camera.lookAt(new THREE.Vector3(0,0,0));
+	camera.rotation.x -= 0.01;
 	camera.updateProjectionMatrix();
 	
 });
@@ -110,7 +109,9 @@ function init() {
 
 	//camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
 	camera = new THREE.OrthographicCamera( window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, 1, 1000 );
-	camera.position.set( 0, 0, 300 );
+	camera.position.set( 0, -20, 300 );
+	camera.lookAt(new THREE.Vector3(0,50,0));
+	camera.updateProjectionMatrix();
 	//camera.lookAt(new THREE.Vector3(0,0,0));
 	var startingPointX = -50;
 	var startingPointY = -50;
@@ -120,8 +121,16 @@ function init() {
 	
 	for (var i2 = 0; i2 < 2; i2++) {
 		for (var i = 0; i < 2; i++) {
-			var tempPlane = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.MeshBasicMaterial({color: 'green'}));
-			//tempPlane.rotation.x = 4.8
+			//var map5 = THREE.ImageUtils.loadDDSTexture( 'js/explosion_dxt5_mip.dds' );
+			//map5.anisotropy = 4;
+				
+			//var tempPlane = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.MeshBasicMaterial( { map: map5, side: THREE.DoubleSide, blending: THREE.AdditiveBlending, depthTest: false, transparent: true } ));
+			var texture = new THREE.Texture( generateTexture() );
+				texture.needsUpdate = true;
+				
+			var tempPlane = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.MeshBasicMaterial( { map: texture, transparent: true }  ));
+			//var tempPlane = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.MeshBasicMaterial({color: 'green'}));
+			//tempPlane.rotation.x = 0.5
 			tempPlane.position.z = -50;
 			tempPlane.position.x = startingPointX + (i * 200);
 			tempPlane.position.y = startingPointY + (i2 * 200);
@@ -209,6 +218,34 @@ function init() {
 	window.addEventListener( 'resize', onWindowResize, false );
 
 }
+			function generateTexture() {
+
+				var canvas = document.createElement( 'canvas' );
+				canvas.width = 256;
+				canvas.height = 256;
+
+				var context = canvas.getContext( '2d' );
+				var image = context.getImageData( 0, 0, 256, 256 );
+
+				var x = 0, y = 0;
+
+				for ( var i = 0, j = 0, l = image.data.length; i < l; i += 4, j ++ ) {
+
+					x = j % 256;
+					y = x == 0 ? y + 1 : y;
+
+					image.data[ i ] = 255;
+					image.data[ i + 1 ] = 255;
+					image.data[ i + 2 ] = 255;
+					image.data[ i + 3 ] = Math.floor( x ^ y );
+
+				}
+
+				context.putImageData( image, 0, 0 );
+
+				return canvas;
+
+			}
 
 function onWindowResize() {
 
@@ -242,7 +279,10 @@ function render() {
 	//	sphere.position.x += roundedGamma / 10;	
 	if (accelerationIncludingGravity) {
 		sphere.position.x += accelerationIncludingGravity.y /3.5;
+		sphere.rotation.y -= accelerationIncludingGravity.y /100;
+		sphere.rotation.x -= accelerationIncludingGravity.x /100;
 		sphere.position.y -= accelerationIncludingGravity.x /3.5;
+		//sphere.rotation.y -= accelerationIncludingGravity.x /3.5;
 		//sphere.position.x -= accelerationIncludingGravity.x /.5;
 		//sphere.position.z += accelerationIncludingGravity.y /.5;
 	}
