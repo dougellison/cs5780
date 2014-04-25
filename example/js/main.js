@@ -17,6 +17,8 @@ var planes = new Array();
 
 var currentPlaneName = "0_0";
 
+var texture1 = THREE.ImageUtils.loadTexture( "js/tiny_tile.png" );
+
 var line;
 
 init();
@@ -106,6 +108,20 @@ function init() {
 	container.appendChild( stats.domElement );
 	
 	document.body.appendChild( container );
+	
+	
+	if ( ! Detector.webgl ) {
+		renderer = new THREE.CanvasRenderer();
+	}
+	else {
+		renderer = new THREE.WebGLRenderer();
+	}
+	
+	renderer.setSize( window.innerWidth, window.innerHeight );
+
+	container.appendChild( renderer.domElement );
+	
+	
 
 	camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
 	//camera = new THREE.OrthographicCamera( window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, 1, 1000 );
@@ -119,6 +135,7 @@ function init() {
 	
 	
 	
+	texture1.anisotropy = renderer.getMaxAnisotropy();			
 	for (var i2 = 0; i2 < 2; i2++) {
 		for (var i = 0; i < 2; i++) {
 			//var map5 = THREE.ImageUtils.loadDDSTexture( 'js/explosion_dxt5_mip.dds' );
@@ -127,8 +144,10 @@ function init() {
 			//var tempPlane = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.MeshBasicMaterial( { map: map5, side: THREE.DoubleSide, blending: THREE.AdditiveBlending, depthTest: false, transparent: true } ));
 			var texture = new THREE.Texture( generateTexture() );
 				texture.needsUpdate = true;
-				
-			var tempPlane = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.MeshBasicMaterial( { map: texture, transparent: true }  ));
+			
+			
+			var tempPlane = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture1 } )  );
+			//var tempPlane = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.MeshBasicMaterial( { map: texture, transparent: true }  ));
 			//var tempPlane = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.MeshBasicMaterial({color: 'green'}));
 			//tempPlane.rotation.x = 0.5
 			tempPlane.position.z = -50;
@@ -142,11 +161,6 @@ function init() {
 	}
 	
 
-	
-	
-
-
-	
 	// Grid
 
 	var line_material = new THREE.LineBasicMaterial( { color: 0x303030 } ),
@@ -179,15 +193,15 @@ function init() {
 
 	//particleLight = new THREE.Mesh( new THREE.SphereGeometry( 4, 8, 8 ), new THREE.MeshBasicMaterial( { color: 0xffffff } ) );
 	
-	//var pointLight = new THREE.PointLight( 0xffffff, 1.5 );
-	//pointLight.position.set( 0, 100, 90 );
+	var pointLight = new THREE.PointLight( 0xffffff, 1.5 );
+	pointLight.position.set( 0, 100, 90 );
 	//pointLight.color.setHSL( Math.random(), 1, 0.5 );
-	//scene.add(pointLight);
+	scene.add(pointLight);
 	//scene.add( particleLight );
 
 	// Lights
 
-	//scene.add( new THREE.AmbientLight( 0x111111 ) );
+	//scene.add( new THREE.AmbientLight( 0x000044 ) );
 
 	//var directionalLight = new THREE.DirectionalLight( /*Math.random() * */ 0xffffff, 0.125 );
 
@@ -203,16 +217,7 @@ function init() {
 	//scene.add( pointLight );
 
 	//
-	if ( ! Detector.webgl ) {
-		renderer = new THREE.CanvasRenderer();
-	}
-	else {
-		renderer = new THREE.WebGLRenderer();
-	}
-	
-	renderer.setSize( window.innerWidth, window.innerHeight );
 
-	container.appendChild( renderer.domElement );
 
 
 	window.addEventListener( 'resize', onWindowResize, false );
@@ -296,6 +301,12 @@ function render() {
 				currentPlaneName = intersects[i].object.name;
 			}
 		}
+	}
+	else {
+		for (var i = 0; i < planes.length; i++) {
+			planes[i].material.color.setRGB(1,1,1);
+		}
+		sphere.position = new THREE.Vector3(0,0,0);
 	}
 	//var material = new THREE.LineBasicMaterial({
 	//color: 0x0000ff
