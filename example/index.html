@@ -1,4 +1,4 @@
-<html>
+<html ng-app="mainApp">
 	<head>
 		<style>
 		body {
@@ -14,46 +14,98 @@
 			#stats #fps #fpsText { color: #aaa !important }
 			#stats #fps #fpsGraph { display: none }
 		</style>
-	</head>
-	<body>
-		<button id="button">Click to go full screen</button>
-		<button id="reset">Click to reset</button>
-		<button id="movePlane">Click to move plane</button>
-		<!--<button id="move">Move left / right</button>		
+        <script src="js/jquery-2.0.3.min.js"></script>
+
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.7/angular.min.js"></script>
+        <script type="text/javascript" src="lib/main.js"></script>
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+    </head>
+
+    <body ng-controller="mainCtrl" class="container">
+        <div class="container">
+            <!-- Static navbar -->
+            <div class="navbar navbar-default">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Puzzle Ball</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="https://github.com/dougellison/dougellison.github.io">GitHub Project</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">New Game<b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#" ng-click="newGame()">Classic</a></li>
+
+                            </ul>
+                        </li>
+                    </ul>
+                </div><!--/.nav-collapse -->
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        {{helloWorld}}
+		<!--<button id="move">Move left / right</button>
 		<input id ="checkbox" type="checkbox"/> Move left -->
 		<div id="mainDrawLocation" style="background-color: #000000"></div>
 		
 	</body>
-	<script src="js/jquery-2.0.3.min.js"></script>
-	<script src="js/threejssource/three.js"></script> 
-	<script src="js/threejs/optimer_bold.typeface.js"></script> 
-	<script src="js/threejs/Detector.js"></script> 
-	<script src="js/threejs/stats.min.js"></script> 
-	<script src="js/threejs/optimer_regular.typeface.js"></script> 
-	<script src="js/screenfull.min.js"></script>
-	
-	<script>
-		if (location.search && location.search.indexOf('laptop') != -1) {
-		$.getScript('http://remote-tilt.com/js/device-motion-polyfill.js?key=someKey');
-		//$.getScript('http://remote-tilt.com/js/device-motion-polyfill.js');
-		}
-		
-		if (!window.DeviceOrientationEvent) {
-			alert('Hey it does not work');
-		}
-		//if (window.DeviceOrientationEvent) {
-		//	alert('Hey it does work3');
-		//}
-		
-		//window.addEventListener('orientationchange', function() {
-		//	alert('HOLY ROTATING SCREENS BATMAN:' + window.orientation + " " + screen.width);
-		//}, false);
-		
 
-		</script>
-	 <!--<script src="http://remote-tilt.com/js/device-motion-polyfill.js?key=951"></script> -->
+	<!--<script src="js/threejssource/three.js"></script> -->
+	<!--<script src="js/threejs/optimer_bold.typeface.js"></script> -->
+	<!--<script src="js/threejs/Detector.js"></script> -->
+	<!--<script src="js/threejs/stats.min.js"></script> -->
+	<!--<script src="js/threejs/optimer_regular.typeface.js"></script> -->
+	<!--<script src="js/screenfull.min.js"></script>-->
+	
+	<!--<script>-->
+		<!--if (location.search && location.search.indexOf('laptop') != -1) {-->
+		<!--$.getScript('http://remote-tilt.com/js/device-motion-polyfill.js?key=someKey');-->
+		<!--//$.getScript('http://remote-tilt.com/js/device-motion-polyfill.js');-->
+		<!--}-->
+		<!---->
+<!--//		if (!window.DeviceOrientationEvent) {-->
+<!--//			alert('Hey it does not work');-->
+<!--//		}-->
+		<!--//if (window.DeviceOrientationEvent) {-->
+		<!--//	alert('Hey it does work3');-->
+		<!--//}-->
+		<!---->
+		<!--//window.addEventListener('orientationchange', function() {-->
+		<!--//	alert('HOLY ROTATING SCREENS BATMAN:' + window.orientation + " " + screen.width);-->
+		<!--//}, false);-->
+		<!---->
+
+		<!--</script>-->
+	 <!--<!--<script src="http://remote-tilt.com/js/device-motion-polyfill.js?key=951"></script> -->
 	 
 	 
 	
-		<script type="text/javascript" src="js/main.js"></script>
 </html>
