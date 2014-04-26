@@ -53,28 +53,57 @@
                             </ul>
                         </li>
                     </ul>
-                </div><!--/.nav-collapse -->
+                </div>
             </div>
+        </div>
+        <div class="container" ng-hide="gameStarted">
+            <div class="page-header">
+                <h1>Welcome to Puzzle ball.</h1>
+            </div>
+            <h3>
+                To begin select New Game from the menu above. Otherwise scroll down for details
+            </h3>
+
+            <p>
+                Puzzle Ball is a web based mobile 3D game.  It is written using:
+                <ul>
+                    <li><a href="http://threejs.org" target="_blank">ThreeJS</a></li>
+                    <li><a href="http://angularjs.org" target="_blank">AngularJS</a></li>
+                    <li><a href="http://getbootstrap.com" target="_blank">Bootstrap</a></li>
+                    <li><a href="http://jquery.com" target="_blank">JQuery</a></li>
+                </ul>
+
+                Using ThreeJS it tries to render first using WebGL (best performance) followed by Canvas.  At this point in time it does best guess with regards to orientation and device motion.
+            </p>
         </div>
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-        {{helloWorld}}
 		<!--<button id="move">Move left / right</button>
 		<input id ="checkbox" type="checkbox"/> Move left -->
-		<div id="mainDrawLocation" style="background-color: #000000"></div>
+        <div class="container" ng-if="gameStarted" ng-switch="gameState">
+            <div ng-switch-when="beginGame" class="jumbotron">
+                Please rotate your phone to how you wish to play and then select next <button class="btn btn-primary btn-lg" ng-click="gameStart = 'tiltLeft'">Next</button>
+            </div>
+            <div ng-switch-when="tiltLeft" class="jumbotron">
+                Please tilt your phone left
+            </div>
+            <div ng-switch-when="tiltRight" class="jumbotron">
+                Please tilt your phone right
+            </div>
+            <div ng-switch-when="tiltUp" class="jumbotron">
+                Please tilt your phone up
+            </div>
+            <div ng-switch-when="tiltDown" class="jumbotron">
+                Please tilt your phone down
+            </div>
+            <div ng-switch-when="calibrated" class="jumbotron">
+                The game is now calibrated click <button class="btn btn-primary" ng-click="startGame()">Start Game</button> to continue
+            </div>
+            <div id="mainDrawLocation" ng-switch-when="gameLoaded" style="background-color: #000000"></div>
+        </div>
+
 		
 	</body>
 

@@ -8,8 +8,11 @@ myApp.controller('mainCtrl', function($scope) {
     $scope.helloWorld = "helloWorld22";
 
     $scope.newGame = function() {
-        alert('New Game');
+        $scope.gameStarted = true;
+        $scope.gameState = "beginGame";
     }
+
+
 
 });
 
