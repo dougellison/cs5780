@@ -20,13 +20,13 @@
         <script type="text/javascript" src="lib/main.js"></script>
 
         <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="lib/bootstrap-3.1.1/css/bootstrap.min.css">
 
         <!-- Optional theme -->
-        <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="lib/bootstrap-3.1.1/css/bootstrap-theme.min.css">
 
         <!-- Latest compiled and minified JavaScript -->
-        <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <script src="lib/bootstrap-3.1.1/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="lib/moment.min.js"></script>
         <script type="text/javascript" src="lib/three.min.js"></script>
         <script type="text/javascript" src="lib/threejs/Detector.js"></script>
@@ -59,6 +59,19 @@
                     </ul>
                 </div>
             </div>
+        </div>
+        <!-- Single button -->
+        <div class="btn-group btn-primary" ng-show="gameRunning" style="position: absolute; top: 10px; left: 10px;">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                Game <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+                <li><a href="#" ng-click="pause()">Pause</a></li>
+                <li><a href="#" ng-click="toggleFullscreen()"><span ng-if="isFullScreen">Exit</span><span ng-if="!isFullScreen">Enter</span> Full Screen</a></li>
+
+                <li><a href="#" ng-click="resetLevel()">Reset Level</a></li>
+                <li><a href="#" ng-click="quit()">Quit</a></li>
+            </ul>
         </div>
         <div class="container" ng-hide="gameStarted">
             <div class="page-header">
