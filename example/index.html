@@ -27,11 +27,15 @@
 
         <!-- Latest compiled and minified JavaScript -->
         <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="lib/moment.min.js"></script>
+        <script type="text/javascript" src="lib/three.min.js"></script>
+        <script type="text/javascript" src="lib/threejs/Detector.js"></script>
+        <script type="text/javascript" src="lib/screenfull.min.js"></script>
 
     </head>
 
     <body ng-controller="mainCtrl" class="container">
-        <div class="container">
+        <div class="container" ng-hide="gameRunning">
             <!-- Static navbar -->
             <div class="navbar navbar-default">
                 <div class="navbar-header">
@@ -83,20 +87,34 @@
 		<!--<button id="move">Move left / right</button>
 		<input id ="checkbox" type="checkbox"/> Move left -->
         <div class="container" ng-if="gameStarted" ng-switch="gameState">
-            <div ng-switch-when="beginGame" class="jumbotron">
-                Please rotate your phone to how you wish to play and then select next <button class="btn btn-primary btn-lg" ng-click="gameStart = 'tiltLeft'">Next</button>
+
+            <div ng-switch-when="rendererSelection" class="jumbotron">
+                <span ng-if="!renderSupport">Unfortunately your phone does not appear to support either Canvas or WebGL rendering. Hopefully it will in the future.  Come back and try again soon!</span>
+                <span ng-if="renderSupport">You phone supports : <b>{{renderSupport}}</b> rendering. Press <button class="btn btn-primary btn-lg" ng-click="setGameState('deviceMotionSupport')">Next</button> to continue</span>
+
+            </div>
+
+            <div ng-switch-when="deviceMotionSupport" class="jumbotron" ng-init="checkDeviceMotionSupport()">
+                <span ng-if="deviceMotionSupport">Your device supports the JavaScript event DeviceMotion! Press <button ng-click="setGameState('beginCalibration')" class="btn btn-primary btn-lg">Next</button> to begin calibration</span>
+                <span ng-if="!deviceMotionSupport">Unfortunately your device doesn't support the JavaScript event DeviceMotion so Puzzle Ball cannot be played on your mobile device.  Try back soon!</span>
+            </div>
+            <div ng-switch-when="beginCalibration" class="jumbotron">
+                Rotate your phone to how you wish to play and then select next <button class="btn btn-primary btn-lg" ng-click="beginCalibration()">Next</button>
             </div>
             <div ng-switch-when="tiltLeft" class="jumbotron">
-                Please tilt your phone left
+                Tilt your phone left
             </div>
             <div ng-switch-when="tiltRight" class="jumbotron">
-                Please tilt your phone right
+                Tilt your phone right
             </div>
             <div ng-switch-when="tiltUp" class="jumbotron">
-                Please tilt your phone up
+                Tilt your phone up
             </div>
             <div ng-switch-when="tiltDown" class="jumbotron">
-                Please tilt your phone down
+                Tilt your phone down
+            </div>
+            <div ng-switch-when="tiltCalibrationCompleted" class="jumbotron" ng-init="startLevelEvent()">
+                Hold your phone in what you want to be the level position. This is the position where the ball should not roll in any direction.  Press <button ng-click="setLevelPosition()" class="btn btn-lg btn-primary">Next</button>
             </div>
             <div ng-switch-when="calibrated" class="jumbotron">
                 The game is now calibrated click <button class="btn btn-primary" ng-click="startGame()">Start Game</button> to continue
@@ -114,26 +132,26 @@
 	<!--<script src="js/threejs/optimer_regular.typeface.js"></script> -->
 	<!--<script src="js/screenfull.min.js"></script>-->
 	
-	<!--<script>-->
-		<!--if (location.search && location.search.indexOf('laptop') != -1) {-->
-		<!--$.getScript('http://remote-tilt.com/js/device-motion-polyfill.js?key=someKey');-->
-		<!--//$.getScript('http://remote-tilt.com/js/device-motion-polyfill.js');-->
-		<!--}-->
-		<!---->
-<!--//		if (!window.DeviceOrientationEvent) {-->
-<!--//			alert('Hey it does not work');-->
-<!--//		}-->
-		<!--//if (window.DeviceOrientationEvent) {-->
-		<!--//	alert('Hey it does work3');-->
-		<!--//}-->
-		<!---->
-		<!--//window.addEventListener('orientationchange', function() {-->
-		<!--//	alert('HOLY ROTATING SCREENS BATMAN:' + window.orientation + " " + screen.width);-->
-		<!--//}, false);-->
-		<!---->
+	<script>
+		if (location.search && location.search.indexOf('laptop') != -1) {
+		$.getScript('http://remote-tilt.com/js/device-motion-polyfill.js?key=someKey');
+		//$.getScript('http://remote-tilt.com/js/device-motion-polyfill.js');
+		}
 
-		<!--</script>-->
-	 <!--<!--<script src="http://remote-tilt.com/js/device-motion-polyfill.js?key=951"></script> -->
+//		if (!window.DeviceOrientationEvent) {
+//			alert('Hey it does not work');
+//		}
+		//if (window.DeviceOrientationEvent) {
+		//	alert('Hey it does work3');
+		//}
+
+		//window.addEventListener('orientationchange', function() {
+		//	alert('HOLY ROTATING SCREENS BATMAN:' + window.orientation + " " + screen.width);
+		//}, false);
+
+
+		</script>
+	 <!--<script src="http://remote-tilt.com/js/device-motion-polyfill.js?key=951"></script>
 	 
 	 
 	
