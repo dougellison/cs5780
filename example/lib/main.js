@@ -7,6 +7,7 @@ var myApp = angular.module('mainApp', []);
 myApp.controller('mainCtrl', function($scope, $filter) {
 
     $scope.accelerationData = null;
+    $scope.isFullScreen = false;
 
     $scope.newGame = function() {
         $scope.gameStarted = true;
@@ -136,6 +137,7 @@ myApp.controller('mainCtrl', function($scope, $filter) {
     $scope.startGame = function() {
         if (screenfull.enabled) {
             screenfull.request();
+            $scope.isFullScreen = true;
         }
 
         $scope.gameRunning = true;
@@ -143,6 +145,33 @@ myApp.controller('mainCtrl', function($scope, $filter) {
 
     }
 
+    $scope.pause = function() {
+        alert('Pause Game');
+    }
+
+    $scope.quit = function() {
+        delete $scope.gameState;
+        $scope.gameRunning = false;
+        $scope.gameStarted = false;
+        $scope.isFullScreen = false;
+        screenFull.exit();
+        //alert('Quit');
+    }
+
+    $scope.toggleFullscreen = function() {
+        if ($scope.isFullScreen) {
+            screenfull.exit();
+        }
+        else {
+            screenfull.request();
+        }
+        $scope.isFullScreen = !$scope.isFullScreen;
+
+    }
+
+    $scope.resetLevel = function() {
+        alert('Reset Level');
+    }
 
 
 
