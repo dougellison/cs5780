@@ -28,6 +28,12 @@ myApp.controller('mainCtrl', function($scope, $filter) {
     }
 
     $scope.checkDeviceMotionSupport = function() {
+
+        //TODO HACK JUMP!!!
+        $scope.gameState = 'gameLoaded';
+        $scope.gameRunning = true;
+        return;
+
         if (window.DeviceOrientationEvent) {
             $scope.deviceMotionSupport = true;
         }
@@ -42,7 +48,6 @@ myApp.controller('mainCtrl', function($scope, $filter) {
     $scope.yTilt = [];
     $scope.zTilt = [];
 
-    $scope.xTiltLeft = 0;
 
     $scope.biggestTilt = {}
     $scope.recordTilt = function(deviceMotion) {
@@ -154,7 +159,8 @@ myApp.controller('mainCtrl', function($scope, $filter) {
         $scope.gameRunning = false;
         $scope.gameStarted = false;
         $scope.isFullScreen = false;
-        screenFull.exit();
+        screenfull.exit();
+        $scope.tiltCount = 0;
         //alert('Quit');
     }
 
