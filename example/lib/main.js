@@ -30,9 +30,9 @@ myApp.controller('mainCtrl', function($scope, $filter) {
     $scope.checkDeviceMotionSupport = function() {
 
         //TODO HACK JUMP!!!
-        $scope.gameState = 'gameLoaded';
-        $scope.gameRunning = true;
-        return;
+        //$scope.gameState = 'gameLoaded';
+        //$scope.gameRunning = true;
+        //return;
 
         if (window.DeviceOrientationEvent) {
             $scope.deviceMotionSupport = true;
