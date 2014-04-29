@@ -116,7 +116,8 @@
                 <span ng-if="!deviceMotionSupport">Unfortunately your device doesn't support the JavaScript event DeviceMotion so Puzzle Ball cannot be played on your mobile device.  Try back soon!</span>
             </div>
             <div ng-switch-when="beginCalibration" class="jumbotron">
-                Rotate your phone to how you wish to play and then select next <button class="btn btn-primary btn-lg" ng-click="beginCalibration()">Next</button>
+                Rotate your phone to how you wish to play. Over the next few screens you will be asked to rotate your screen left / right / up / down. This is to learn the rotation of your device. Rotate in a slow smooth fashion.
+                Press <button class="btn btn-primary btn-lg" ng-click="beginCalibration()">Next</button> to begin.
             </div>
             <div ng-switch-when="tiltLeft" class="jumbotron">
                 Tilt your phone left

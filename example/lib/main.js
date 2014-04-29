@@ -53,7 +53,7 @@ myApp.controller('mainCtrl', function($scope, $filter) {
     $scope.recordTilt = function(deviceMotion) {
         // Initialize as soon as they start moving
         if (angular.isUndefined($scope.startTime))
-            $scope.startTime = moment().add('seconds', 1.5);
+            $scope.startTime = moment().add('seconds', 3);
 
         if (angular.isNumber(deviceMotion.accelerationIncludingGravity.x))
             $scope.xTilt.push(deviceMotion.accelerationIncludingGravity.x);
