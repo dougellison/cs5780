@@ -77,17 +77,17 @@ myApp.controller('mainCtrl', function($scope, $filter) {
 
             // Arrays are now sorted.  Need to see what has the biggest difference.
             biggest.val = $scope.xTilt[0] - $scope.xTilt[$scope.xTilt.length -1];
-            biggest.tilt = 'xTilt';
+            biggest.tilt = 'x';
             biggest.endVal = endValues.x;
 
             if ($scope.yTilt[0] - $scope.yTilt[$scope.yTilt.length -1] > biggest.val) {
-                biggest.tilt = 'yTilt';
+                biggest.tilt = 'y';
                 biggest.val = $scope.yTilt[0] - $scope.yTilt[$scope.yTilt.length -1];
                 biggest.endVal = endValues.y;
             }
 
             if ($scope.zTilt[0] - $scope.zTilt[$scope.zTilt.length -1] > biggest.val) {
-                biggest.tilt = 'zTilt';
+                biggest.tilt = 'z';
                 biggest.val = $scope.zTilt[0] - $scope.zTilt[$scope.zTilt.length -1];
                 biggest.endVal = endValues.z;
             }
@@ -140,10 +140,10 @@ myApp.controller('mainCtrl', function($scope, $filter) {
     }
 
     $scope.startGame = function() {
-        if (screenfull.enabled) {
-            screenfull.request();
-            $scope.isFullScreen = true;
-        }
+//        if (screenfull.enabled) {
+//            screenfull.request();
+//            $scope.isFullScreen = true;
+//        }
 
         $scope.gameRunning = true;
         $scope.gameState = 'gameLoaded';

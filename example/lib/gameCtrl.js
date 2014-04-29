@@ -37,9 +37,11 @@ myApp.controller('gameCtrl', function($scope) {
     $scope.scene = new THREE.Scene();
 
 
-    var tileTexture = THREE.ImageUtils.loadTexture( "lib/tiny_tile.png" );
+    var tileTexture = THREE.ImageUtils.loadTexture( "lib/tiny_tileDeactivated.png" );
+    var tileTextureActivated = THREE.ImageUtils.loadTexture( "lib/tiny_tile.png" );
     // This basically sets the direction and orientation of the texture on our tiles.
     tileTexture.anisotropy = $scope.renderer.getMaxAnisotropy();
+    tileTextureActivated.anisotropy = $scope.renderer.getMaxAnisotropy();
 
     // Planes is the objects which will start all the tiles.  This will be used across all levels.
     var planes = []
@@ -49,7 +51,8 @@ myApp.controller('gameCtrl', function($scope) {
     var renderLevel1 = function() {
         for (var i2 = 0; i2 < 2; i2++) {
             for (var i = 0; i < 2; i++) {
-                var tempPlane = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.MeshPhongMaterial( { color: 0xffffff, map: tileTexture } )  );
+                var tempPlane = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.MeshPhongMaterial( { color: 0xf122f, map: tileTexture } )  );
+                tempPlane.isActive = false;
                 tempPlane.position.z = -50;
                 tempPlane.position.x = startingPointX + (i * 200);
                 tempPlane.position.y = startingPointY + (i2 * 200);
@@ -86,6 +89,18 @@ myApp.controller('gameCtrl', function($scope) {
     $scope.scene.add(pointLight);
 
     animate();
+
+    $scope.checkForWin = function() {
+        var anyNotActive = false;
+        angular.forEach(planes, function(plane) {
+            if (!plane.isActive) {
+                anyNotActive = true;
+            }
+        });
+        if (anyNotActive) {
+            console.log('Yay you won this round!!!');
+        }
+    }
 
 //
 //    window.addEventListener( 'resize', onWindowResize, false );
@@ -255,10 +270,28 @@ myApp.controller('gameCtrl', function($scope) {
         //if (roundedGamma && roundedGamma != 0)
         //	sphere.position.x += roundedGamma / 10;
         if (accelerationIncludingGravity) {
-            $scope.playerSphere.position.x += accelerationIncludingGravity.y /.5;
-            $scope.playerSphere.rotation.y -= accelerationIncludingGravity.y /100;
-            $scope.playerSphere.rotation.x -= accelerationIncludingGravity.x /100;
-            $scope.playerSphere.position.y -= accelerationIncludingGravity.x /.5;
+            // Need to pick the direction based on what their up down coordinates were.
+
+            // Stores a map {'tiltLeft' : {val: differenceInTiltForDirection, tilt: 'axis that was tiled most', endVal: 'positive/negative'
+            if ($scope.biggestTilt['tiltLeft'].endVal < 0) {
+                $scope.playerSphere.position.x += accelerationIncludingGravity[$scope.biggestTilt['tiltLeft'].tilt];
+            }
+            else {
+                $scope.playerSphere.position.x -= accelerationIncludingGravity[$scope.biggestTilt['tiltLeft'].tilt];
+            }
+
+            if ($scope.biggestTilt['tiltUp'].endVal > 0) {
+                $scope.playerSphere.position.y += accelerationIncludingGravity[$scope.biggestTilt['tiltUp'].tilt];
+            }
+            else {
+                $scope.playerSphere.position.y -= accelerationIncludingGravity[$scope.biggestTilt['tiltUp'].tilt];
+            }
+
+
+            //$scope.playerSphere.position.x += accelerationIncludingGravity.y /.5;
+            //$scope.playerSphere.rotation.y -= accelerationIncludingGravity.y /100;
+            //$scope.playerSphere.rotation.x -= accelerationIncludingGravity.x /100;
+            //$scope.playerSphere.position.y -= accelerationIncludingGravity.x /.5;
             //sphere.rotation.y -= accelerationIncludingGravity.x /3.5;
             //sphere.position.x -= accelerationIncludingGravity.x /.5;
             //sphere.position.z += accelerationIncludingGravity.y /.5;
@@ -269,7 +302,15 @@ myApp.controller('gameCtrl', function($scope) {
             for (var i = 0; i < intersects.length; i++) {
                 console.log(intersects[i].object.name);
                 if (currentPlaneName != intersects[i].object.name) {
-                    intersects[i].object.material.color= new THREE.Color('red');
+                    if (intersects[i].object.isActive) {
+                        intersects[i].object.material =  new THREE.MeshPhongMaterial( { map: tileTexture } )
+                        intersects[i].object.isActive = false;
+                    }
+                    else {
+                        intersects[i].object.isActive = true;
+                        intersects[i].object.material =  new THREE.MeshPhongMaterial( { map: tileTextureActivated } )
+                        $scope.checkForWin();
+                    }
                     currentPlaneName = intersects[i].object.name;
                 }
             }
