@@ -152,7 +152,31 @@ myApp.controller('gameCtrl', function($scope) {
 ////});
 //
     var deviceMotionLocal = function(eventData) {
-        accelerationIncludingGravity = eventData.accelerationIncludingGravity;
+
+        accelerationIncludingGravity = {};
+
+
+        if ($scope.neutralLeveling.x > 0) {
+            accelerationIncludingGravity.x = eventData.accelerationIncludingGravity.x - $scope.neutralLeveling.x;
+        }
+        else {
+            accelerationIncludingGravity.x = eventData.accelerationIncludingGravity.x + $scope.neutralLeveling.x;
+        }
+
+        if ($scope.neutralLeveling.y > 0) {
+            accelerationIncludingGravity.y = eventData.accelerationIncludingGravity.y - $scope.neutralLeveling.y;
+        }
+        else {
+            accelerationIncludingGravity.y = eventData.accelerationIncludingGravity.y - $scope.neutralLeveling.y;
+        }
+
+        if ($scope.neutralLeveling.z > 0) {
+            accelerationIncludingGravity.z = eventData.accelerationIncludingGravity.z - $scope.neutralLeveling.z;
+        }
+        else {
+            accelerationIncludingGravity.z = eventData.accelerationIncludingGravity.z - $scope.neutralLeveling.z;
+        }
+
     }
 //    if (window.DeviceMotionEvent) {
         window.addEventListener('devicemotion', deviceMotionLocal, false);
