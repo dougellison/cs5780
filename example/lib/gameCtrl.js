@@ -193,24 +193,24 @@ myApp.controller('gameCtrl', function($scope) {
 
 
         if ($scope.neutralLeveling.x > 0) {
-            accelerationIncludingGravity.x = difficultyMultiplier.x - $scope.neutralLeveling.x;
+            accelerationIncludingGravity.x = difficultyMultiplier.x - $scope.neutralLeveling.x / difficultyMap[$scope.gameSettings.difficulty];
         }
         else {
-            accelerationIncludingGravity.x = difficultyMultiplier.x + $scope.neutralLeveling.x;
+            accelerationIncludingGravity.x = difficultyMultiplier.x + $scope.neutralLeveling.x/ difficultyMap[$scope.gameSettings.difficulty];
         }
 
         if ($scope.neutralLeveling.y > 0) {
-            accelerationIncludingGravity.y = difficultyMultiplier.y- $scope.neutralLeveling.y;
+            accelerationIncludingGravity.y = difficultyMultiplier.y- $scope.neutralLeveling.y/ difficultyMap[$scope.gameSettings.difficulty];
         }
         else {
-            accelerationIncludingGravity.y = difficultyMultiplier.y - $scope.neutralLeveling.y;
+            accelerationIncludingGravity.y = difficultyMultiplier.y - $scope.neutralLeveling.y/ difficultyMap[$scope.gameSettings.difficulty];
         }
 
         if ($scope.neutralLeveling.z > 0) {
-            accelerationIncludingGravity.z = difficultyMultiplier.z - $scope.neutralLeveling.z;
+            accelerationIncludingGravity.z = difficultyMultiplier.z - $scope.neutralLeveling.z/ difficultyMap[$scope.gameSettings.difficulty];
         }
         else {
-            accelerationIncludingGravity.z = difficultyMultiplier.z - $scope.neutralLeveling.z;
+            accelerationIncludingGravity.z = difficultyMultiplier.z - $scope.neutralLeveling.z/ difficultyMap[$scope.gameSettings.difficulty];
         }
 
     }
