@@ -9,11 +9,18 @@ myApp.controller('gameCtrl', function($scope) {
     // Creating a child div just to render to. AngularJS will destroy the children when the parent scope gets deleted. So we want to render to a child so that everything gets reset when the user quits.
     var childContainer = document.createElement( 'div' );
 
+    //This is the count of frame drawn.  This is used to not try ray casting the first couple frames because no tiles or sphere is yet drawn.
+    var frameCount = 0;
+
     // This is just a helper that comes with ThreeJS to display some simple frame rate data.
     $scope.stats = new Stats();
     childContainer.appendChild( $scope.stats.domElement );
 
     drawLocation.append( childContainer );
+
+
+    // Start the game as a blank slate always.
+    $scope.gameStatus = "";
 
     // We setup the renderer from the parent scope during calibration. For this purpose we'll just re-use that
     $scope.renderer.setSize( window.innerWidth, window.innerHeight );
@@ -51,7 +58,15 @@ myApp.controller('gameCtrl', function($scope) {
     var renderLevel1 = function() {
         for (var i2 = 0; i2 < 2; i2++) {
             for (var i = 0; i < 2; i++) {
-                var tempPlane = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.MeshPhongMaterial( { color: 0xf122f, map: tileTexture } )  );
+                var tempPlane = null;
+                if (i == 0 && i2 == 0) {
+                    tempPlane = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.MeshPhongMaterial( { map: tileTextureActivated } )  );
+                    tempPlane.isActive = true;
+                }
+                else {
+                    tempPlane = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.MeshPhongMaterial( { map: tileTexture } )  );
+                }
+
                 tempPlane.isActive = false;
                 tempPlane.position.z = -50;
                 tempPlane.position.x = startingPointX + (i * 200);
@@ -81,6 +96,9 @@ myApp.controller('gameCtrl', function($scope) {
     var sphereGeometry = new THREE.SphereGeometry( 20, 10, 10 );
     var sphereMaterial = new THREE.MeshBasicMaterial( {color: 0x33ccff, wireframe: true} );
     $scope.playerSphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
+
+    // We want the sphere to start at whatever the first tile is.
+    $scope.playerSphere.position = new THREE.Vector3(planes[0].position.x, planes[0].position.y, 0);
     $scope.playerSphere.geometry.dynamic = true;
     $scope.scene.add( $scope.playerSphere );
 
@@ -97,10 +115,22 @@ myApp.controller('gameCtrl', function($scope) {
                 anyNotActive = true;
             }
         });
-        if (anyNotActive) {
-            console.log('Yay you won this round!!!');
+        if (!anyNotActive) {
+            $scope.gameStatus = 'win';
         }
     }
+
+    $scope.$on('resetLevel', function() {
+        angular.forEach(planes, function(plane) {
+            $scope.resetPlane(plane);
+        })
+        // Set the first tile to be active because thats where we start.
+        planes[0].material = new THREE.MeshPhongMaterial( { map: tileTextureActivated } );
+
+        $scope.playerSphere.position = new THREE.Vector3(planes[0].position.x,planes[0].position.y,0);
+        $scope.gameStatus = "";
+
+    })
 
 //
 //    window.addEventListener( 'resize', onWindowResize, false );
@@ -151,35 +181,46 @@ myApp.controller('gameCtrl', function($scope) {
 ////	sphere.position = new THREE.Vector3(0,0,0);
 ////});
 //
+    var difficultyMap = {0: 2, 1 : 1, 2:.5, 3: .25, 4 : .1};
     var deviceMotionLocal = function(eventData) {
+
+        var difficultyMultiplier = {};
+        difficultyMultiplier.x = eventData.accelerationIncludingGravity.x / difficultyMap[$scope.gameSettings.difficulty];
+        difficultyMultiplier.y = eventData.accelerationIncludingGravity.y / difficultyMap[$scope.gameSettings.difficulty];
+        difficultyMultiplier.z = eventData.accelerationIncludingGravity.z / difficultyMap[$scope.gameSettings.difficulty];
 
         accelerationIncludingGravity = {};
 
 
         if ($scope.neutralLeveling.x > 0) {
-            accelerationIncludingGravity.x = eventData.accelerationIncludingGravity.x - $scope.neutralLeveling.x;
+            accelerationIncludingGravity.x = difficultyMultiplier.x - $scope.neutralLeveling.x;
         }
         else {
-            accelerationIncludingGravity.x = eventData.accelerationIncludingGravity.x + $scope.neutralLeveling.x;
+            accelerationIncludingGravity.x = difficultyMultiplier.x + $scope.neutralLeveling.x;
         }
 
         if ($scope.neutralLeveling.y > 0) {
-            accelerationIncludingGravity.y = eventData.accelerationIncludingGravity.y - $scope.neutralLeveling.y;
+            accelerationIncludingGravity.y = difficultyMultiplier.y- $scope.neutralLeveling.y;
         }
         else {
-            accelerationIncludingGravity.y = eventData.accelerationIncludingGravity.y - $scope.neutralLeveling.y;
+            accelerationIncludingGravity.y = difficultyMultiplier.y - $scope.neutralLeveling.y;
         }
 
         if ($scope.neutralLeveling.z > 0) {
-            accelerationIncludingGravity.z = eventData.accelerationIncludingGravity.z - $scope.neutralLeveling.z;
+            accelerationIncludingGravity.z = difficultyMultiplier.z - $scope.neutralLeveling.z;
         }
         else {
-            accelerationIncludingGravity.z = eventData.accelerationIncludingGravity.z - $scope.neutralLeveling.z;
+            accelerationIncludingGravity.z = difficultyMultiplier.z - $scope.neutralLeveling.z;
         }
 
     }
 //    if (window.DeviceMotionEvent) {
-        window.addEventListener('devicemotion', deviceMotionLocal, false);
+    window.addEventListener('devicemotion', deviceMotionLocal, false);
+
+    $scope.resetPlane = function(plane) {
+        plane.isActive = false;
+        plane.material = new THREE.MeshPhongMaterial( { map: tileTexture } );
+    }
 //    }
 //
 //    window.addEventListener('deviceorientation', function(event) {
@@ -282,7 +323,13 @@ myApp.controller('gameCtrl', function($scope) {
         $scope.stats.update();
     }
 
+
     function render() {
+
+        frameCount++;
+        // If we've lost or won don't draw because game is over for now.
+        if ($scope.gameStatus != "")
+            return;
 
         //var timer = 0.0001 * Date.now();
 
@@ -324,11 +371,9 @@ myApp.controller('gameCtrl', function($scope) {
         var intersects = raycaster.intersectObjects(planes, false);
         if (intersects.length > 0) {
             for (var i = 0; i < intersects.length; i++) {
-                console.log(intersects[i].object.name);
                 if (currentPlaneName != intersects[i].object.name) {
                     if (intersects[i].object.isActive) {
-                        intersects[i].object.material =  new THREE.MeshPhongMaterial( { map: tileTexture } )
-                        intersects[i].object.isActive = false;
+                        $scope.resetPlane(intersects[i].object);
                     }
                     else {
                         intersects[i].object.isActive = true;
@@ -340,10 +385,12 @@ myApp.controller('gameCtrl', function($scope) {
             }
         }
         else {
-            for (var i = 0; i < planes.length; i++) {
-                planes[i].material.color.setRGB(1,1,1);
+            if (frameCount > 2 && frameCount != NaN) {
+                $scope.$apply(function() {
+                    $scope.gameStatus = "lost";
+                })
             }
-            $scope.playerSphere.position = new THREE.Vector3(0,0,0);
+
         }
         //var material = new THREE.LineBasicMaterial({
         //color: 0x0000ff

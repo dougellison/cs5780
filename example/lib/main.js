@@ -9,7 +9,13 @@ myApp.controller('mainCtrl', function($scope, $filter) {
     $scope.accelerationData = null;
     $scope.isFullScreen = false;
 
-    $scope.newGame = function() {
+    $scope.gameSettings = {};
+
+    $scope.newGame = function(difficulty) {
+
+        // Currently a range between 0-4 inclusive
+        $scope.gameSettings.difficulty = difficulty;
+
         $scope.gameStarted = true;
         $scope.gameState = "rendererSelection";
 
@@ -176,7 +182,7 @@ myApp.controller('mainCtrl', function($scope, $filter) {
     }
 
     $scope.resetLevel = function() {
-        alert('Reset Level');
+        $scope.$broadcast('resetLevel');
     }
 
 

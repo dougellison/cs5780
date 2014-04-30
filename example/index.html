@@ -8,6 +8,12 @@
 				margin: 0px;
 				overflow: hidden;
 			}
+        .lost {
+            background-color: #ff0b20;
+        }
+        .win {
+            background-color: green;
+        }
 			
 			#stats { position: absolute; top:75; left: 10 }
 			#stats #fps { background: transparent !important }
@@ -56,8 +62,11 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">New Game<b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li><a href="#" ng-click="newGame()">Classic</a></li>
-
+                                <li><a href="#" ng-click="newGame(0)">Easy</a></li>
+                                <li><a href="#" ng-click="newGame(1)">Normal</a></li>
+                                <li><a href="#" ng-click="newGame(2)">Advanced</a></li>
+                                <li><a href="#" ng-click="newGame(3)">Expert</a></li>
+                                <li><a href="#" ng-click="newGame(4)">HA HA HA! What are you thinking?</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -71,9 +80,13 @@
             </button>
             <ul class="dropdown-menu" role="menu">
                 <li><a href="#" ng-click="pause()">Pause</a></li>
-                <li><a href="#" ng-click="toggleFullscreen()"><span ng-if="isFullScreen">Exit</span><span ng-if="!isFullScreen">Enter</span> Full Screen</a></li>
-
                 <li><a href="#" ng-click="resetLevel()">Reset Level</a></li>
+                <li><a href="#" ng-click="gameSettings.difficulty = 0">Set Difficulty Easy</a></li>
+                <li><a href="#" ng-click="gameSettings.difficulty = 1">Set Difficulty Normal</a></li>
+                <li><a href="#" ng-click="gameSettings.difficulty = 2">Set Difficulty Advanced</a></li>
+                <li><a href="#" ng-click="gameSettings.difficulty = 3">Set Difficulty Expert</a></li>
+                <li><a href="#" ng-click="gameSettings.difficulty = 4">Set Difficulty HA HA HA!</a></li>
+                <li role="presentation" class="divider"></li>
                 <li><a href="#" ng-click="quit()">Quit</a></li>
             </ul>
         </div>
@@ -137,7 +150,7 @@
             <div ng-switch-when="calibrated" class="jumbotron">
                 The game is now calibrated click <button class="btn btn-primary" ng-click="startGame()">Start Game</button> to continue
             </div>
-            <div id="mainDrawLocation" style="position: absolute; top: 0px; left:0px; z-index: -1" ng-switch-when="gameLoaded" ng-controller="gameCtrl"></div>
+            <div id="mainDrawLocation" style="position: absolute; top: 0px; left:0px; z-index: -1;" ng-switch-when="gameLoaded" ng-controller="gameCtrl" ng-class="gameStatus"></div>
         </div>
 
 		
