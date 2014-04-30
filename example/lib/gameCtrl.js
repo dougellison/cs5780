@@ -20,7 +20,7 @@ myApp.controller('gameCtrl', function($scope) {
 
 
     // Start the game as a blank slate always.
-    $scope.gameStatus = "";
+    $scope.gameSettings.gameStatus = "";
 
     // We setup the renderer from the parent scope during calibration. For this purpose we'll just re-use that
     $scope.renderer.setSize( window.innerWidth, window.innerHeight );
@@ -53,7 +53,7 @@ myApp.controller('gameCtrl', function($scope) {
     // Planes is the objects which will start all the tiles.  This will be used across all levels.
     var planes = []
     // We always start at Level 1
-    $scope.level = 1;
+    $scope.gameSettings.level = 1;
 
     var renderLevel1 = function() {
         for (var i2 = 0; i2 < 2; i2++) {
@@ -65,9 +65,10 @@ myApp.controller('gameCtrl', function($scope) {
                 }
                 else {
                     tempPlane = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.MeshPhongMaterial( { map: tileTexture } )  );
+                    tempPlane.isActive = false;
                 }
 
-                tempPlane.isActive = false;
+
                 tempPlane.position.z = -50;
                 tempPlane.position.x = startingPointX + (i * 200);
                 tempPlane.position.y = startingPointY + (i2 * 200);
@@ -79,7 +80,7 @@ myApp.controller('gameCtrl', function($scope) {
         }
     }
 
-    switch ($scope.level) {
+    switch ($scope.gameSettings.level) {
         case 1:
             renderLevel1();
             break;
@@ -116,7 +117,9 @@ myApp.controller('gameCtrl', function($scope) {
             }
         });
         if (!anyNotActive) {
-            $scope.gameStatus = 'win';
+            $scope.$apply(function(){
+                $scope.gameSettings.gameStatus = 'win';
+            })
         }
     }
 
@@ -128,9 +131,9 @@ myApp.controller('gameCtrl', function($scope) {
         planes[0].material = new THREE.MeshPhongMaterial( { map: tileTextureActivated } );
 
         $scope.playerSphere.position = new THREE.Vector3(planes[0].position.x,planes[0].position.y,0);
-        $scope.gameStatus = "";
+        $scope.gameSettings.gameStatus = "";
 
-    })
+    });
 
 //
 //    window.addEventListener( 'resize', onWindowResize, false );
@@ -328,7 +331,7 @@ myApp.controller('gameCtrl', function($scope) {
 
         frameCount++;
         // If we've lost or won don't draw because game is over for now.
-        if ($scope.gameStatus != "")
+        if ($scope.gameSettings.gameStatus != "" || $scope.gameSettings.pause)
             return;
 
         //var timer = 0.0001 * Date.now();
@@ -387,7 +390,7 @@ myApp.controller('gameCtrl', function($scope) {
         else {
             if (frameCount > 2 && frameCount != NaN) {
                 $scope.$apply(function() {
-                    $scope.gameStatus = "lost";
+                    $scope.gameSettings.gameStatus = "lost";
                 })
             }
 

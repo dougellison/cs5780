@@ -9,7 +9,7 @@ myApp.controller('mainCtrl', function($scope, $filter) {
     $scope.accelerationData = null;
     $scope.isFullScreen = false;
 
-    $scope.gameSettings = {};
+    $scope.gameSettings = {pause:false};
 
     $scope.newGame = function(difficulty) {
 
@@ -157,7 +157,7 @@ myApp.controller('mainCtrl', function($scope, $filter) {
     }
 
     $scope.pause = function() {
-        alert('Pause Game');
+        $scope.$broadcast('pause');
     }
 
     $scope.quit = function() {
