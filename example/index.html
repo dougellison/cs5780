@@ -39,6 +39,8 @@
         <script type="text/javascript" src="lib/three.min.js"></script>
         <script type="text/javascript" src="lib/threejs/Detector.js"></script>
         <script type="text/javascript" src="lib/threejs/stats.min.js"></script>
+        <script type="text/javascript" src="lib/threejs/optimer_bold.typeface.js"></script>
+        <script type="text/javascript" src="lib/threejs/optimer_regular.typeface.js"></script>
         <script type="text/javascript" src="lib/screenfull.min.js"></script>
 
 
@@ -91,7 +93,7 @@
             </ul>
         </div>
         <div ng-show="gameSettings.gameStatus != ''" style="position: absolute; top: 100px; left: 10px;">
-            <span ng-if="gameSettings.gameStatus == 'win'" class="h2">Congratulations! <button class="btn btn-lg btn-primary" ng-click="nextLevel()">
+            <span ng-if="gameSettings.gameStatus == 'win'" class="h4">Congratulations! <button class="btn btn-lg btn-primary" ng-click="nextLevel()">
                                                                             <span ng-if="gameSettings.level == 3">Start Over</span>
                                                                             <span ng-if="gameSettings.level != 3">Next Level</span>
                                                                         </button>

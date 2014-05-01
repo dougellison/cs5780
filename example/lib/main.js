@@ -7,9 +7,9 @@ var myApp = angular.module('mainApp', []);
 myApp.controller('mainCtrl', function($scope, $filter) {
 
     $scope.accelerationData = null;
-    $scope.isFullScreen = false;
 
-    $scope.gameSettings = {pause:false};
+    // rotationConstant is a modifier to determine how quickly the sphere rotates in relation to the surface below it.
+    $scope.gameSettings = {pause:false, rotationConstant: 23};
 
     $scope.newGame = function(difficulty) {
 
@@ -59,7 +59,7 @@ myApp.controller('mainCtrl', function($scope, $filter) {
     $scope.recordTilt = function(deviceMotion) {
         // Initialize as soon as they start moving
         if (angular.isUndefined($scope.startTime))
-            $scope.startTime = moment().add('seconds', 3);
+            $scope.startTime = moment().add('seconds', 2.5);
 
         if (angular.isNumber(deviceMotion.accelerationIncludingGravity.x))
             $scope.xTilt.push(deviceMotion.accelerationIncludingGravity.x);
@@ -167,6 +167,8 @@ myApp.controller('mainCtrl', function($scope, $filter) {
         $scope.isFullScreen = false;
         screenfull.exit();
         $scope.tiltCount = 0;
+
+        $scope.gameSettings.gameStatus = "";
         //alert('Quit');
     }
 
@@ -183,6 +185,10 @@ myApp.controller('mainCtrl', function($scope, $filter) {
 
     $scope.resetLevel = function() {
         $scope.$broadcast('resetLevel');
+    }
+
+    $scope.nextLevel = function() {
+        $scope.$broadcast('nextLevel');
     }
 
 

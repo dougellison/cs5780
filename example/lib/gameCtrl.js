@@ -12,6 +12,10 @@ myApp.controller('gameCtrl', function($scope) {
     //This is the count of frame drawn.  This is used to not try ray casting the first couple frames because no tiles or sphere is yet drawn.
     var frameCount = 0;
 
+    var currentPlaneName = "0_0";
+
+
+
     // This is just a helper that comes with ThreeJS to display some simple frame rate data.
     $scope.stats = new Stats();
     childContainer.appendChild( $scope.stats.domElement );
@@ -55,23 +59,29 @@ myApp.controller('gameCtrl', function($scope) {
     // We always start at Level 1
     $scope.gameSettings.level = 1;
 
+
+    $scope.renderSizePlanes = {};
     var renderLevel1 = function() {
+        var planeSize = {x: 200, y: 200};
+        $scope.renderSizePlanes[1] = planeSize;
         for (var i2 = 0; i2 < 2; i2++) {
             for (var i = 0; i < 2; i++) {
                 var tempPlane = null;
                 if (i == 0 && i2 == 0) {
-                    tempPlane = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.MeshPhongMaterial( { map: tileTextureActivated } )  );
+
+                    tempPlane = new THREE.Mesh(new THREE.PlaneGeometry(planeSize.x, planeSize.y), new THREE.MeshPhongMaterial( { map: tileTextureActivated } )  );
                     tempPlane.isActive = true;
+                    $scope.firstPlane = tempPlane;
                 }
                 else {
-                    tempPlane = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.MeshPhongMaterial( { map: tileTexture } )  );
+                    tempPlane = new THREE.Mesh(new THREE.PlaneGeometry(planeSize.x, planeSize.y), new THREE.MeshPhongMaterial( { map: tileTexture } )  );
                     tempPlane.isActive = false;
                 }
 
 
                 tempPlane.position.z = -50;
-                tempPlane.position.x = startingPointX + (i * 200);
-                tempPlane.position.y = startingPointY + (i2 * 200);
+                tempPlane.position.x = startingPointX + (i * planeSize.x);
+                tempPlane.position.y = startingPointY + (i2 * planeSize.y);
                 tempPlane.name = i2 + "_" + i;
                 tempPlane.geometry.dynamic = true;
                 $scope.scene.add(tempPlane);
@@ -79,6 +89,92 @@ myApp.controller('gameCtrl', function($scope) {
             }
         }
     }
+    var renderLevel2 = function() {
+        var planeSize = {x: 100, y: 100};
+        $scope.renderSizePlanes[1] = planeSize;
+        for (var i2 = 0; i2 < 3; i2++) {
+            for (var i = 0; i < 3; i++) {
+                var tempPlane = null;
+
+                if (i == 0 && i2 == 0) {
+                    tempPlane = new THREE.Mesh(new THREE.PlaneGeometry(planeSize.x, planeSize.y), new THREE.MeshPhongMaterial( { map: tileTextureActivated } )  );
+                    tempPlane.isActive = true;
+                    $scope.firstPlane = tempPlane;
+
+                }
+                else {
+                    tempPlane = new THREE.Mesh(new THREE.PlaneGeometry(planeSize.x, planeSize.y), new THREE.MeshPhongMaterial( { map: tileTexture } )  );
+                    tempPlane.isActive = false;
+                }
+
+
+                tempPlane.position.z = -50;
+                tempPlane.position.x = startingPointX + (i * planeSize.x);
+                tempPlane.position.y = startingPointY + (i2 * planeSize.y);
+                tempPlane.name = i2 + "_" + i;
+                tempPlane.geometry.dynamic = true;
+
+                // Leave a blank hole in the middle.
+                if (i2 == 1 && i == 1)
+                    continue;
+
+                $scope.scene.add(tempPlane);
+                planes.push(tempPlane);
+            }
+        }
+    }
+
+    var renderLevel3 = function() {
+        startingPointY = -150;
+        startingPointX = -100;
+        var planeSize = {x: 90, y: 90};
+        $scope.renderSizePlanes[1] = planeSize;
+        for (var i2 = 0; i2 < 5; i2++) {
+            for (var i = 0; i < 5; i++) {
+                var tempPlane = null;
+
+                if (i2 == 0 && i == 2) {
+                    tempPlane = new THREE.Mesh(new THREE.PlaneGeometry(planeSize.x, planeSize.y), new THREE.MeshPhongMaterial( { map: tileTextureActivated } )  );
+                    tempPlane.isActive = true;
+                    $scope.firstPlane = tempPlane;
+                    currentPlaneName = "0_2";
+                }
+                else {
+                    tempPlane = new THREE.Mesh(new THREE.PlaneGeometry(planeSize.x, planeSize.y), new THREE.MeshPhongMaterial( { map: tileTexture } )  );
+                    tempPlane.isActive = false;
+                }
+
+
+                tempPlane.position.z = -50;
+                tempPlane.position.x = startingPointX + (i * planeSize.x);
+                tempPlane.position.y = startingPointY + (i2 * planeSize.y);
+                tempPlane.name = i2 + "_" + i;
+                tempPlane.geometry.dynamic = true;
+
+                // We want to leave a number of holes.
+                if (i2 == 0 && i != 2)
+                    continue;
+
+                if (i2 == 1 && i != 2)
+                    continue;
+
+                if (i2 == 2 && (i == 0 || i == 4))
+                    continue;
+
+                if (i2 == 3 && (i == 2))
+                    continue;
+
+                if (i2 == 4 && (i != 0))
+                    continue;
+
+                $scope.scene.add(tempPlane);
+                planes.push(tempPlane);
+            }
+        }
+    }
+
+    //$scope.gameLevels = {1: renderLevel1, 2: renderLevel2};
+    $scope.gameLevels = {1: renderLevel1, 2: renderLevel2, 3: renderLevel3};
 
     switch ($scope.gameSettings.level) {
         case 1:
@@ -95,11 +191,15 @@ myApp.controller('gameCtrl', function($scope) {
     }
 
     var sphereGeometry = new THREE.SphereGeometry( 20, 10, 10 );
-    var sphereMaterial = new THREE.MeshBasicMaterial( {color: 0x33ccff, wireframe: true} );
+    var sphereTexture = THREE.ImageUtils.loadTexture( 'lib/spheretest1.png' );
+    sphereTexture.anisotropy = $scope.renderer.getMaxAnisotropy();
+
+
+    var sphereMaterial = new THREE.MeshBasicMaterial( {map: sphereTexture} );
     $scope.playerSphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
 
     // We want the sphere to start at whatever the first tile is.
-    $scope.playerSphere.position = new THREE.Vector3(planes[0].position.x, planes[0].position.y, 0);
+    $scope.playerSphere.position = new THREE.Vector3($scope.firstPlane.position.x, $scope.firstPlane.position.y, 0);
     $scope.playerSphere.geometry.dynamic = true;
     $scope.scene.add( $scope.playerSphere );
 
@@ -119,6 +219,9 @@ myApp.controller('gameCtrl', function($scope) {
         if (!anyNotActive) {
             $scope.$apply(function(){
                 $scope.gameSettings.gameStatus = 'win';
+                if ($scope.gameSettings.level == 3) {
+                    $scope.winCondition();
+                }
             })
         }
     }
@@ -128,62 +231,19 @@ myApp.controller('gameCtrl', function($scope) {
             $scope.resetPlane(plane);
         })
         // Set the first tile to be active because thats where we start.
-        planes[0].material = new THREE.MeshPhongMaterial( { map: tileTextureActivated } );
+        $scope.firstPlane.material = new THREE.MeshPhongMaterial( { map: tileTextureActivated } );
+        $scope.firstPlane.isActive = true
+        $scope.firstPlane.isActive = true
 
-        $scope.playerSphere.position = new THREE.Vector3(planes[0].position.x,planes[0].position.y,0);
+        $scope.playerSphere.position = new THREE.Vector3($scope.firstPlane.position.x,$scope.firstPlane.position.y,0);
         $scope.gameSettings.gameStatus = "";
+        currentPlaneName = $scope.firstPlane.name;
 
     });
 
-//
-//    window.addEventListener( 'resize', onWindowResize, false );
-//
-//
-//    var camera, scene, renderer, objects;
-//    var particleLight, pointLight;
-//    var materials = [];
-//    var defaultRotateSize = 0.01;
-//    var rotateSize = defaultRotateSize;
-//    var alpha, beta, gamma;
-//    var alphaText;
-//    var betaText;
-//    var gammaText;
-//    var sphere;
-//    var roundedAlpha, roundedBeta, roundedGamma;
     var accelerationIncludingGravity;
-//    var planes = new Array();
-//
-    var currentPlaneName = "0_0";
-//
-//
-//
-//    var line;
-//
-////init();
-////
-//
-////document.getElementById('button').addEventListener('click', function () {
-////    if (screenfull.enabled) {
-////        screenfull.request();
-////		$('#button').hide();
-////    } else {
-////        // Ignore or do something else
-////    }
-////});
-////document.getElementById('movePlane').addEventListener('click', function () {
-////    planes[0].position.z -= 10;
-////	//camera.position.x += 10;
-////	//camera.position.y += 10;
-////
-////	camera.rotation.x -= 0.01;
-////	camera.updateProjectionMatrix();
-////
-////});
-////
-////document.getElementById('reset').addEventListener('click', function() {
-////	sphere.position = new THREE.Vector3(0,0,0);
-////});
-//
+
+
     var difficultyMap = {0: 2, 1 : 1, 2:.5, 3: .25, 4 : .1};
     var deviceMotionLocal = function(eventData) {
 
@@ -224,100 +284,6 @@ myApp.controller('gameCtrl', function($scope) {
         plane.isActive = false;
         plane.material = new THREE.MeshPhongMaterial( { map: tileTexture } );
     }
-//    }
-//
-//    window.addEventListener('deviceorientation', function(event) {
-//
-//        roundedAlpha = Math.round(event.alpha);
-//        roundedBeta = Math.round(event.beta);
-//        roundedGamma = Math.round(event.gamma);
-//
-//
-//
-//        if (roundedAlpha != alpha) {
-//            alpha = roundedAlpha
-//
-//
-//            /*if (alphaText) {
-//             scene.remove(alphaText);
-//             }
-//             alphaText = createText(roundedAlpha, 50);
-//             scene.add(alphaText);
-//             */
-//        }
-//
-//        if (roundedBeta != beta) {
-//
-//            beta = roundedBeta;
-//            /*
-//             if (betaText) {
-//             scene.remove(betaText);
-//             }
-//             betaText = createText(roundedBeta, 125);
-//             scene.add(betaText);
-//             */
-//
-//
-//        }
-//
-//        if (roundedGamma != gamma) {
-//            gamma = roundedGamma;
-//
-//            /*
-//             if (gammaText) {
-//             scene.remove(gammaText);
-//             }
-//             gammaText = createText(roundedGamma, 200);
-//             scene.add(gammaText);
-//             */
-//
-//        }
-//    },false);
-//
-//    function init() {
-//
-//
-//    }
-//    function generateTexture() {
-//
-//        var canvas = document.createElement( 'canvas' );
-//        canvas.width = 256;
-//        canvas.height = 256;
-//
-//        var context = canvas.getContext( '2d' );
-//        var image = context.getImageData( 0, 0, 256, 256 );
-//
-//        var x = 0, y = 0;
-//
-//        for ( var i = 0, j = 0, l = image.data.length; i < l; i += 4, j ++ ) {
-//
-//            x = j % 256;
-//            y = x == 0 ? y + 1 : y;
-//
-//            image.data[ i ] = 255;
-//            image.data[ i + 1 ] = 255;
-//            image.data[ i + 2 ] = 255;
-//            image.data[ i + 3 ] = Math.floor( x ^ y );
-//
-//        }
-//
-//        context.putImageData( image, 0, 0 );
-//
-//        return canvas;
-//
-//    }
-//
-//    function onWindowResize() {
-//
-//        camera.aspect = window.innerWidth / window.innerHeight;
-//        camera.updateProjectionMatrix();
-//
-//        renderer.setSize( window.innerWidth, window.innerHeight );
-//
-//    }
-//
-////
-//
     function animate() {
 
         requestAnimationFrame( animate );
@@ -334,41 +300,33 @@ myApp.controller('gameCtrl', function($scope) {
         if ($scope.gameSettings.gameStatus != "" || $scope.gameSettings.pause)
             return;
 
-        //var timer = 0.0001 * Date.now();
+        if ($scope.gameSettings.gameState == 'wonLastLevel') {
+            $scope.renderer.render( $scope.scene, $scope.camera );
+            return;
+        }
 
-        //camera.lookAt( sphere.position );
-
-        //if (roundedBeta && roundedBeta != 0)
-        //	sphere.position.z += roundedBeta / 10;
-
-        //if (roundedGamma && roundedGamma != 0)
-        //	sphere.position.x += roundedGamma / 10;
         if (accelerationIncludingGravity) {
             // Need to pick the direction based on what their up down coordinates were.
 
             // Stores a map {'tiltLeft' : {val: differenceInTiltForDirection, tilt: 'axis that was tiled most', endVal: 'positive/negative'
             if ($scope.biggestTilt['tiltLeft'].endVal < 0) {
                 $scope.playerSphere.position.x += accelerationIncludingGravity[$scope.biggestTilt['tiltLeft'].tilt];
+                $scope.playerSphere.rotation.y -= accelerationIncludingGravity[$scope.biggestTilt['tiltLeft'].tilt] / $scope.gameSettings.rotationConstant;
             }
             else {
                 $scope.playerSphere.position.x -= accelerationIncludingGravity[$scope.biggestTilt['tiltLeft'].tilt];
+                $scope.playerSphere.rotation.y += accelerationIncludingGravity[$scope.biggestTilt['tiltLeft'].tilt] / $scope.gameSettings.rotationConstant;
             }
 
             if ($scope.biggestTilt['tiltUp'].endVal > 0) {
                 $scope.playerSphere.position.y += accelerationIncludingGravity[$scope.biggestTilt['tiltUp'].tilt];
+                $scope.playerSphere.rotation.x -= accelerationIncludingGravity[$scope.biggestTilt['tiltUp'].tilt] / $scope.gameSettings.rotationConstant;
             }
             else {
                 $scope.playerSphere.position.y -= accelerationIncludingGravity[$scope.biggestTilt['tiltUp'].tilt];
+                $scope.playerSphere.rotation.x += accelerationIncludingGravity[$scope.biggestTilt['tiltUp'].tilt] / $scope.gameSettings.rotationConstant;
             }
 
-
-            //$scope.playerSphere.position.x += accelerationIncludingGravity.y /.5;
-            //$scope.playerSphere.rotation.y -= accelerationIncludingGravity.y /100;
-            //$scope.playerSphere.rotation.x -= accelerationIncludingGravity.x /100;
-            //$scope.playerSphere.position.y -= accelerationIncludingGravity.x /.5;
-            //sphere.rotation.y -= accelerationIncludingGravity.x /3.5;
-            //sphere.position.x -= accelerationIncludingGravity.x /.5;
-            //sphere.position.z += accelerationIncludingGravity.y /.5;
         }
         var raycaster = new THREE.Raycaster( $scope.playerSphere.position, new THREE.Vector3(0,0,-1));
         var intersects = raycaster.intersectObjects(planes, false);
@@ -395,72 +353,83 @@ myApp.controller('gameCtrl', function($scope) {
             }
 
         }
-        //var material = new THREE.LineBasicMaterial({
-        //color: 0x0000ff
-        //});
-
-        //scene.remove(line);
-        //var geometry = new THREE.Geometry();
-        //geometry.vertices.push( sphere.position );
-        //geometry.vertices.push( new THREE.Vector3( 0, 0, -1 ) );
-
-
-        //line = new THREE.Line( geometry, material );
-        //scene.add( line );
-
-
-        //plane.rotation.x += .01;
-
-
         $scope.renderer.render( $scope.scene, $scope.camera );
 
     }
-//    function createText(text, location) {
-//        var blah = "" + text;
-//        height = 20,
-//            size = 70,
-//            hover = 30,
-//
-//            curveSegments = 1,
-//
-//            bevelThickness = 2,
-//            bevelSize = 1.5,
-//            bevelSegments = 3,
-//            bevelEnabled = true,
-//
-//            font = "optimer", // helvetiker, optimer, gentilis, droid sans, droid serif
-//            weight = "bold", // normal bold
-//            style = "normal"; // normal italic
-//
-//
-//        var textGeo = new THREE.TextGeometry(blah, {
-//            size: size,
-//            height: height,
-//            curveSegments: curveSegments,
-//            font: font,
-//            weight: weight,
-//            style: style,
-//            bevelThickness: bevelThickness,
-//            bevelSize: bevelSize,
-//            bevelEnabled: bevelEnabled
-//        });
-//
-//        var material = new THREE.MeshFaceMaterial( [
-//            new THREE.MeshPhongMaterial( { color: 0xffffff, shading: THREE.FlatShading } ), // front
-//            new THREE.MeshPhongMaterial( { color: 0xffffff, shading: THREE.SmoothShading } ) // side
-//        ] );
-//
-//        var textMesh = new THREE.Mesh( textGeo, material );
-//        textMesh.position.y = location;
-//        return textMesh;
-//
-//    }
-//
+
+    $scope.$on('nextLevel', function() {
+        if ($scope.winText) {
+            $scope.scene.remove($scope.winText);
+            delete $scope.winText;
+        }
+        angular.forEach(planes, function(plane) {
+            $scope.scene.remove(plane);
+        })
+        planes.length = 0;
+        $scope.gameSettings.level++;
+        if (angular.isUndefined($scope.gameLevels[$scope.gameSettings.level])) {
+            $scope.gameSettings.level = 1;
+        }
+        $scope.gameLevels[$scope.gameSettings.level]();
+        $scope.gameSettings.gameStatus = "";
+        currentPlaneName = $scope.firstPlane.name;
+
+        frameCount = 0;
+        $scope.playerSphere.position = new THREE.Vector3($scope.firstPlane.position.x,$scope.firstPlane.position.y,0);
+    });
+
+    $scope.winCondition = function() {
+        angular.forEach(planes, function(plane) {
+            $scope.scene.remove(plane);
+        })
+
+        $scope.winText = createText("You won!",  {x: -100, y:0, z:0});
+        $scope.scene.add($scope.winText);
+        planes.length = 0;
+    }
+
+    function createText(text, location) {
+        var
+        height = 20,
+            size = 70,
+            hover = 30,
+
+            curveSegments = 1,
+
+            bevelThickness = 2,
+            bevelSize = 1.5,
+            bevelSegments = 3,
+            bevelEnabled = true,
+
+            font = "optimer",
+            weight = "bold",
+            style = "normal";
 
 
+        var textGeo = new THREE.TextGeometry(text, {
+            size: size,
+            height: height,
+            curveSegments: curveSegments,
+            font: font,
+            weight: weight,
+            style: style,
+            bevelThickness: bevelThickness,
+            bevelSize: bevelSize,
+            bevelEnabled: bevelEnabled
+        });
 
+        var material = new THREE.MeshFaceMaterial( [
+            new THREE.MeshPhongMaterial( { color: 0xffffff, shading: THREE.FlatShading } ), // front
+            new THREE.MeshPhongMaterial( { color: 0xffffff, shading: THREE.SmoothShading } ) // side
+        ] );
 
+        var textMesh = new THREE.Mesh( textGeo, material );
+        textMesh.position.x = location.x;
+        textMesh.position.y = location.y;
+        textMesh.position.z = location.z;
+        return textMesh;
 
+    }
 
 
 })
